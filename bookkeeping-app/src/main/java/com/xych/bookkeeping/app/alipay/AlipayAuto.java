@@ -1,5 +1,6 @@
 package com.xych.bookkeeping.app.alipay;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class AlipayAuto {
         for(; tempDt.compareTo(endDateTime) >= 0; tempDt = tempDt.plusDays(1)) {
             String dateStr = tempDt.toString("yyyy.MM.dd");
             selectRang(dateStr, dateStr);
-            List<AlipayRecordDTO> dtoList = grabData();
+            List<AlipayRecordDTO> dtoList = grabDataList();
             System.out.println(dtoList);
         }
     }
@@ -56,8 +57,81 @@ public class AlipayAuto {
      * 抓取当前页的数据
      * @CreateDate 2020年1月9日下午3:52:01
      */
-    private List<AlipayRecordDTO> grabData() {
-        return null;
+    private List<AlipayRecordDTO> grabDataList() {
+        List<AlipayRecordDTO> dtoList = new ArrayList<>();
+        WebElement tableEle = driver.findElement(By.id("tradeRecordsIndex"));
+        List<WebElement> trEles = tableEle.findElements(By.className("J-item"));
+        for(WebElement trEle : trEles) {
+            AlipayRecordDTO dto = grabData(trEle);
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
+    private AlipayRecordDTO grabData(WebElement trEle) {
+        AlipayRecordDTO dto = new AlipayRecordDTO();
+        // ID
+        dto.setUserCode("xych");
+        dto.setConsumeTime(grabConsumeTime(trEle));
+        dto.setConsumeTitle(grabConsumeTitle(trEle));
+        String[] tradeStrs = grabTrade(trEle);
+        if(tradeStrs.length > 1) {
+            dto.setTradeNo(tradeStrs[0]);
+            dto.setTradeId(tradeStrs[1]);
+        }
+        else {
+            dto.setTradeId(tradeStrs[0]);
+        }
+        dto.setOther(grabOther(trEle));
+        return dto;
+    }
+
+    /**
+     * 抓取对方名称
+     * @CreateDate 2020年1月9日下午6:05:46
+     */
+    private String grabOther(WebElement trEle) {
+        String other = trEle.findElement(By.cssSelector(".other>p.name")).getText().trim();
+        return other;
+    }
+
+    /**
+     * 抓取：商家订单号|交易号
+     * @CreateDate 2020年1月9日下午5:50:54
+     */
+    private String[] grabTrade(WebElement trEle) {
+        String[] strs;
+        String tradeStr = trEle.findElement(By.cssSelector(".tradeNo>p")).getText().trim();
+        if(tradeStr.indexOf("|") > 0) {
+            String[] tempStrs = tradeStr.split("|");
+            strs = new String[2];
+            strs[0] = tempStrs[0].substring(tradeStr.indexOf(':') + 1).trim();
+            strs[1] = tempStrs[1].substring(tradeStr.indexOf(':') + 1).trim();
+        }
+        else {
+            strs = new String[1];
+            strs[0] = tradeStr.substring(tradeStr.indexOf(':') + 1);
+        }
+        return strs;
+    }
+
+    /**
+     * 抓取标题
+     * @CreateDate 2020年1月9日下午5:43:35
+     */
+    private String grabConsumeTitle(WebElement trEle) {
+        String title = trEle.findElement(By.className("consume-title")).findElement(By.tagName("a")).getText().trim();
+        return title;
+    }
+
+    /**
+     * 抓取交易时间
+     * @CreateDate 2020年1月9日下午5:37:43
+     */
+    private String grabConsumeTime(WebElement trEle) {
+        String dayStr = trEle.findElement(By.className("time-d")).getText().trim();
+        String timeStr = trEle.findElement(By.className("time-h")).getText().trim();
+        return dayStr.replace(".", "") + timeStr.replace(":", "") + "00";
     }
 
     /**
