@@ -8,6 +8,10 @@ public class InputUtils {
         inputEle.sendKeys(str);
     }
 
+    public static void setByChar(WebElement inputEle, String str) {
+        setByChar(inputEle, str, 500);
+    }
+
     public static void setByChar(WebElement inputEle, String str, long intervalMillis) {
         try {
             inputEle.clear();
