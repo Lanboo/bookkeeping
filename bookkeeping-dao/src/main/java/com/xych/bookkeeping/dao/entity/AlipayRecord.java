@@ -55,9 +55,13 @@ public class AlipayRecord extends BaseEntity {
      */
     private String status;
     /**
-     * 支付途径
+     * 流入流出账户
      */
     private String fundTool;
+    /**
+     * 流出账户
+     */
+    private String fundToolFrom;
     /**
      * 创建时间
      */

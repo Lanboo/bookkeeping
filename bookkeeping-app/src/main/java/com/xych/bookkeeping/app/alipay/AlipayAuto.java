@@ -1,14 +1,16 @@
 package com.xych.bookkeeping.app.alipay;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
 
 import com.xych.bookkeeping.app.common.utils.InputUtils;
 import com.xych.bookkeeping.dao.dto.AlipayRecordDTO;
@@ -29,6 +31,7 @@ public class AlipayAuto {
         driver = WebDriverFactory.newInstance();
         try {
             login("SAOMA");
+            openRecordPage();
             doGrab(startDate, endDate);
         }
         catch(InterruptedException e) {
@@ -36,18 +39,19 @@ public class AlipayAuto {
         }
     }
 
-    private void doGrab(Date startDate, Date endDate) {
-        // 跳转
-        driver.get(AlipayConstants.PATH_RECORD);
+    private void doGrab(Date startDate, Date endDate) throws InterruptedException {
         // 设置查询时间类型：自定义时间
-        Select timeRangSelect = new Select(driver.findElement(By.id("J-select-range")));
-        timeRangSelect.selectByValue("customDate");
+        WebElement timeRangSelectEle = driver.findElements(By.cssSelector("#J-datetime-select>a")).get(0);
+        timeRangSelectEle.click();
+        WebElement timeRangSelectDivEle = driver.findElement(By.cssSelector("div[data-widget-cid=widget-4]"));
+        WebElement customDateItemEle = timeRangSelectDivEle.findElement(By.cssSelector("li[data-value=customDate]"));
+        customDateItemEle.click();
         // 
-        DateTime tempDt = new DateTime(startDate.getTime()).withHourOfDay(0).withSecondOfMinute(0).withMillisOfSecond(0);
+        DateTime tempDt = new DateTime(startDate.getTime()).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
         DateTime endDateTime = new DateTime(endDate.getTime());
-        for(; tempDt.compareTo(endDateTime) >= 0; tempDt = tempDt.plusDays(1)) {
+        for(; tempDt.compareTo(endDateTime) <= 0; tempDt = tempDt.plusDays(1)) {
             String dateStr = tempDt.toString("yyyy.MM.dd");
-            selectRang(dateStr, dateStr);
+            selectRangAndSearch(dateStr, dateStr);
             List<AlipayRecordDTO> dtoList = grabDataList();
             System.out.println(dtoList);
         }
@@ -57,12 +61,13 @@ public class AlipayAuto {
      * 抓取当前页的数据
      * @CreateDate 2020年1月9日下午3:52:01
      */
-    private List<AlipayRecordDTO> grabDataList() {
+    private List<AlipayRecordDTO> grabDataList() throws InterruptedException {
         List<AlipayRecordDTO> dtoList = new ArrayList<>();
         WebElement tableEle = driver.findElement(By.id("tradeRecordsIndex"));
         List<WebElement> trEles = tableEle.findElements(By.className("J-item"));
         for(WebElement trEle : trEles) {
             AlipayRecordDTO dto = grabData(trEle);
+            Thread.sleep(500);
             dtoList.add(dto);
         }
         return dtoList;
@@ -83,7 +88,77 @@ public class AlipayAuto {
             dto.setTradeId(tradeStrs[0]);
         }
         dto.setOther(grabOther(trEle));
+        String amountStr = grabAmount(trEle);
+        if(amountStr.startsWith("-") || amountStr.startsWith("+")) {
+            dto.setAmount(new BigDecimal(amountStr.substring(1).trim()));
+            dto.setFundFlow(amountStr.charAt(0) == '-' ? -1 : 1);
+        }
+        else {
+            dto.setAmount(new BigDecimal(amountStr));
+            // 资金流向最后判断
+        }
+        dto.setStatus(garbStatus(trEle));
+        grabDetailPage(dto, trEle);
+        dto.setCrtTime(new Date());
+        dto.setUptTime(dto.getCrtTime());
+        dto.setOperator("system");
+        System.out.println(dto);
         return dto;
+    }
+
+    /**
+     * 抓取支付/收款的账户
+     * @param dto
+     * @Author WeiXiaowei
+     * @CreateDate 2020年1月10日上午11:27:16
+     */
+    private void grabDetailPage(AlipayRecordDTO dto, WebElement trEle) {
+        // 当前页的Handle
+        String recordPageHandle = driver.getWindowHandle();
+        // 获取超链接对象
+        WebElement titleAEle = trEle.findElement(By.cssSelector(".name > .consume-title > a"));
+        // 点击超链接
+        titleAEle.click();
+        Set<String> handleSet = driver.getWindowHandles();
+        String detailPageHandle = null;
+        for(String handle : handleSet) {
+            if(!recordPageHandle.equals(handle)) {
+                detailPageHandle = handle;
+            }
+        }
+        // 定位到新窗口k
+        WebDriver detailDriver = driver.switchTo().window(detailPageHandle);
+        WebElement tableEle = detailDriver.findElement(By.className("fund-table"));
+        List<WebElement> tdEleList = tableEle.findElements(By.className("detail-list"));
+        if(tdEleList.size() == 1) {
+            String fundTool = tdEleList.get(0).findElement(By.className("fundTool")).getText().trim();
+            dto.setFundTool(fundTool);
+        }
+        else {
+            String fundToolFrom = tdEleList.get(0).findElement(By.cssSelector(".fundTool > a")).getText().trim();
+            dto.setFundToolFrom(fundToolFrom);
+            String fundTool = tdEleList.get(1).findElement(By.className("fundTool")).getText().trim();
+            dto.setFundTool(fundTool);
+        }
+        detailDriver.close();
+    }
+
+    /**
+     * 抓取状态
+     * @CreateDate 2020年1月10日上午10:21:09
+     */
+    private String garbStatus(WebElement trEle) {
+        String status = trEle.findElement(By.cssSelector(".status > p:first-child")).getText().trim();
+        return status;
+    }
+
+    /**
+     * 抓取金额
+     * @CreateDate 2020年1月10日上午10:09:40
+     */
+    private String grabAmount(WebElement trEle) {
+        String amountStr = trEle.findElement(By.cssSelector(".amount > .amount-pay")).getText().trim();
+        return amountStr;
     }
 
     /**
@@ -91,7 +166,7 @@ public class AlipayAuto {
      * @CreateDate 2020年1月9日下午6:05:46
      */
     private String grabOther(WebElement trEle) {
-        String other = trEle.findElement(By.cssSelector(".other>p.name")).getText().trim();
+        String other = trEle.findElement(By.cssSelector(".other > p.name")).getText().trim();
         return other;
     }
 
@@ -101,7 +176,7 @@ public class AlipayAuto {
      */
     private String[] grabTrade(WebElement trEle) {
         String[] strs;
-        String tradeStr = trEle.findElement(By.cssSelector(".tradeNo>p")).getText().trim();
+        String tradeStr = trEle.findElement(By.cssSelector(".tradeNo > p")).getText().trim();
         if(tradeStr.indexOf("|") > 0) {
             String[] tempStrs = tradeStr.split("|");
             strs = new String[2];
@@ -120,7 +195,7 @@ public class AlipayAuto {
      * @CreateDate 2020年1月9日下午5:43:35
      */
     private String grabConsumeTitle(WebElement trEle) {
-        String title = trEle.findElement(By.className("consume-title")).findElement(By.tagName("a")).getText().trim();
+        String title = trEle.findElement(By.cssSelector(".name > .consume-title > a")).getText().trim();
         return title;
     }
 
@@ -129,22 +204,44 @@ public class AlipayAuto {
      * @CreateDate 2020年1月9日下午5:37:43
      */
     private String grabConsumeTime(WebElement trEle) {
-        String dayStr = trEle.findElement(By.className("time-d")).getText().trim();
-        String timeStr = trEle.findElement(By.className("time-h")).getText().trim();
-        return dayStr.replace(".", "") + timeStr.replace(":", "") + "00";
+        String titleHref = trEle.findElement(By.cssSelector(".name > .consume-title > a")).getAttribute("href").trim();
+        String timeStr = titleHref.substring(titleHref.lastIndexOf("=")).trim();
+        return timeStr;
     }
 
     /**
      * 设置查询时间
      * @CreateDate 2020年1月9日下午3:50:06
      */
-    private void selectRang(String startDate, String endDate) {
+    private void selectRangAndSearch(String startDate, String endDate) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         // 设置开始时间
         WebElement beginDateEle = driver.findElement(By.id("beginDate"));
-        InputUtils.set(beginDateEle, startDate);
+        js.executeScript("arguments[0].setAttribute('value', arguments[1]);", beginDateEle, startDate);
         // 设置结束时间
         WebElement endDateEle = driver.findElement(By.id("endDate"));
-        InputUtils.set(endDateEle, endDate);
+        js.executeScript("arguments[0].setAttribute('value', arguments[1]);", endDateEle, endDate);
+        // 点击搜索
+        driver.findElement(By.id("J-set-query-form")).click();
+    }
+
+    /**
+     * 打开账单界面
+     * @CreateDate 2020年1月10日下午3:46:33
+     */
+    private void openRecordPage() throws InterruptedException {
+        // 跳转
+        driver.get(AlipayConstants.PATH_RECORD);
+        Thread.sleep(2000);//用于输入验证码 或者 扫码登陆
+        // 再次扫码
+        try {
+            while(driver.findElement(By.id("risk_qrcode_cnt")) != null) {
+                Thread.sleep(5000);//用于输入验证码 或者 扫码登陆
+            }
+        }
+        catch(Exception e) {
+            // 啥都不做
+        }
     }
 
     /**
