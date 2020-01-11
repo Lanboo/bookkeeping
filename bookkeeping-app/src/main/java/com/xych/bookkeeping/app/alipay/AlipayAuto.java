@@ -28,18 +28,18 @@ public class AlipayAuto {
     }
 
     public void grab(Date startDate, Date endDate) {
-        driver = WebDriverFactory.newInstance();
+        driver = WebDriverFactory.newInstance(false);
         try {
-            login("SAOMA");
+            // login("SAOMA");
             openRecordPage();
             doGrab(startDate, endDate);
         }
-        catch(InterruptedException e) {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void doGrab(Date startDate, Date endDate) throws InterruptedException {
+    private void doGrab(Date startDate, Date endDate) throws Exception {
         // 设置查询时间类型：自定义时间
         WebElement timeRangSelectEle = driver.findElements(By.cssSelector("#J-datetime-select>a")).get(0);
         timeRangSelectEle.click();
@@ -53,7 +53,6 @@ public class AlipayAuto {
             String dateStr = tempDt.toString("yyyy.MM.dd");
             selectRangAndSearch(dateStr, dateStr);
             List<AlipayRecordDTO> dtoList = grabDataList();
-            System.out.println(dtoList);
         }
     }
 
@@ -61,7 +60,7 @@ public class AlipayAuto {
      * 抓取当前页的数据
      * @CreateDate 2020年1月9日下午3:52:01
      */
-    private List<AlipayRecordDTO> grabDataList() throws InterruptedException {
+    private List<AlipayRecordDTO> grabDataList() throws Exception {
         List<AlipayRecordDTO> dtoList = new ArrayList<>();
         WebElement tableEle = driver.findElement(By.id("tradeRecordsIndex"));
         List<WebElement> trEles = tableEle.findElements(By.className("J-item"));
@@ -73,7 +72,7 @@ public class AlipayAuto {
         return dtoList;
     }
 
-    private AlipayRecordDTO grabData(WebElement trEle) {
+    private AlipayRecordDTO grabData(WebElement trEle) throws Exception {
         AlipayRecordDTO dto = new AlipayRecordDTO();
         // ID
         dto.setUserCode("xych");
@@ -88,6 +87,8 @@ public class AlipayAuto {
             dto.setTradeId(tradeStrs[0]);
         }
         dto.setOther(grabOther(trEle));
+        dto.setStatus(garbStatus(trEle));
+        grabDetailPage(dto, trEle);
         String amountStr = grabAmount(trEle);
         if(amountStr.startsWith("-") || amountStr.startsWith("+")) {
             dto.setAmount(new BigDecimal(amountStr.substring(1).trim()));
@@ -97,8 +98,6 @@ public class AlipayAuto {
             dto.setAmount(new BigDecimal(amountStr));
             // 资金流向最后判断
         }
-        dto.setStatus(garbStatus(trEle));
-        grabDetailPage(dto, trEle);
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
         dto.setOperator("system");
@@ -107,12 +106,20 @@ public class AlipayAuto {
     }
 
     /**
+     * 抓取金额
+     * @CreateDate 2020年1月10日上午10:09:40
+     */
+    private String grabAmount(WebElement trEle) {
+        String amountStr = trEle.findElement(By.cssSelector(".amount > .amount-pay")).getText().trim();
+        return amountStr;
+    }
+
+    /**
      * 抓取支付/收款的账户
      * @param dto
-     * @Author WeiXiaowei
      * @CreateDate 2020年1月10日上午11:27:16
      */
-    private void grabDetailPage(AlipayRecordDTO dto, WebElement trEle) {
+    private void grabDetailPage(AlipayRecordDTO dto, WebElement trEle) throws InterruptedException {
         // 当前页的Handle
         String recordPageHandle = driver.getWindowHandle();
         // 获取超链接对象
@@ -140,7 +147,9 @@ public class AlipayAuto {
             String fundTool = tdEleList.get(1).findElement(By.className("fundTool")).getText().trim();
             dto.setFundTool(fundTool);
         }
+        Thread.sleep(500);
         detailDriver.close();
+        driver.switchTo().window(recordPageHandle);
     }
 
     /**
@@ -150,15 +159,6 @@ public class AlipayAuto {
     private String garbStatus(WebElement trEle) {
         String status = trEle.findElement(By.cssSelector(".status > p:first-child")).getText().trim();
         return status;
-    }
-
-    /**
-     * 抓取金额
-     * @CreateDate 2020年1月10日上午10:09:40
-     */
-    private String grabAmount(WebElement trEle) {
-        String amountStr = trEle.findElement(By.cssSelector(".amount > .amount-pay")).getText().trim();
-        return amountStr;
     }
 
     /**
@@ -178,10 +178,10 @@ public class AlipayAuto {
         String[] strs;
         String tradeStr = trEle.findElement(By.cssSelector(".tradeNo > p")).getText().trim();
         if(tradeStr.indexOf("|") > 0) {
-            String[] tempStrs = tradeStr.split("|");
+            String[] tempStrs = tradeStr.split("\\|");
             strs = new String[2];
-            strs[0] = tempStrs[0].substring(tradeStr.indexOf(':') + 1).trim();
-            strs[1] = tempStrs[1].substring(tradeStr.indexOf(':') + 1).trim();
+            strs[0] = tempStrs[0].substring(tempStrs[0].indexOf(':') + 1).trim();
+            strs[1] = tempStrs[1].substring(tempStrs[1].indexOf(':') + 1).trim();
         }
         else {
             strs = new String[1];
