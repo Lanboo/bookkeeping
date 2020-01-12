@@ -11,26 +11,37 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.xych.bookkeeping.app.common.utils.InputUtils;
 import com.xych.bookkeeping.dao.dto.AlipayRecordDTO;
+import com.xych.bookkeeping.dao.service.AlipayRecordServcie;
+import com.xych.uid.UidGenerator;
 
+@Service
 public class AlipayAuto {
     private static final long intervalMillis = 500L;
     private WebDriver driver;
     private String userName = "";
     private String userPwd = "";
+    @Autowired
+    private AlipayRecordServcie alipayRecordServcie;
+    @Autowired
+    private UidGenerator uidGenerator;
 
     public static void main(String[] args) {
         Date startDate = new Date();
         Date endDate = new Date();
-        new AlipayAuto().grab(startDate, endDate);
+        new AlipayAuto().grab(startDate, endDate, true);
     }
 
-    public void grab(Date startDate, Date endDate) {
+    public void grab(Date startDate, Date endDate, Boolean login) {
         driver = WebDriverFactory.newInstance(false);
         try {
-            // login("SAOMA");
+            if(login) {
+                login("SAOMA");
+            }
             openRecordPage();
             doGrab(startDate, endDate);
         }
@@ -53,6 +64,7 @@ public class AlipayAuto {
             String dateStr = tempDt.toString("yyyy.MM.dd");
             selectRangAndSearch(dateStr, dateStr);
             List<AlipayRecordDTO> dtoList = grabDataList();
+            alipayRecordServcie.addList(dtoList);
         }
     }
 
@@ -74,7 +86,7 @@ public class AlipayAuto {
 
     private AlipayRecordDTO grabData(WebElement trEle) throws Exception {
         AlipayRecordDTO dto = new AlipayRecordDTO();
-        // ID
+        dto.setId(uidGenerator.getUID());
         dto.setUserCode("xych");
         dto.setConsumeTime(grabConsumeTime(trEle));
         dto.setConsumeTitle(grabConsumeTitle(trEle));
@@ -97,12 +109,21 @@ public class AlipayAuto {
         else {
             dto.setAmount(new BigDecimal(amountStr));
             // 资金流向最后判断
+            dto.setFundFlow(analysisFlow(dto));
         }
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
         dto.setOperator("system");
         System.out.println(dto);
         return dto;
+    }
+
+    /**
+     * 根据已有信息分析资金流向
+     * @date 2020年1月11日下午9:35:01
+     */
+    private Integer analysisFlow(AlipayRecordDTO dto) {
+        return null;
     }
 
     /**

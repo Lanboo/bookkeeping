@@ -36,6 +36,11 @@ public class AlipayRecordServiceImpl implements AlipayRecordServcie {
     }
 
     @Override
+    public Integer addList(List<AlipayRecordDTO> dtos) {
+        return mapper.insertList(converter.toEntityList(dtos));
+    }
+
+    @Override
     public Integer update(AlipayRecordDTO dto) {
         Example example = new Example(AlipayRecord.class);
         Example.Criteria criteria = example.createCriteria();

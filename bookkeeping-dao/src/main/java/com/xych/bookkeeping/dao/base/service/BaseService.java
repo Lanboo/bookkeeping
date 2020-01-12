@@ -11,6 +11,8 @@ public interface BaseService<T extends BaseDto> {
 
     Integer addOne(T dto);
 
+    Integer addList(List<T> dtos);
+
     Integer update(T dto);
 
     Integer delete(T dto);

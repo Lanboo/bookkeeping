@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 public class AlipayRecord extends BaseEntity {
     private static final long serialVersionUID = 1L;
     @Id
-    private Integer id;
+    private Long id;
     /**
      * 用户代码
      */

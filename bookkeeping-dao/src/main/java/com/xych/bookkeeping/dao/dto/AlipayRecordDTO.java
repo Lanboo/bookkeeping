@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class AlipayRecordDTO extends BaseDto {
     private static final long serialVersionUID = 1L;
-    private Integer id;
+    private Long id;
     /**
      * 用户代码
      */
