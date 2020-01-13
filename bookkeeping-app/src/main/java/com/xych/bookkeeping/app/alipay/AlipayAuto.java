@@ -28,7 +28,7 @@ public class AlipayAuto {
     @Autowired
     private AlipayRecordServcie alipayRecordServcie;
     @Autowired
-    private UidGenerator uidGenerator;
+    private UidGenerator defaultUidGenerator;
 
     public static void main(String[] args) {
         Date startDate = new Date();
@@ -86,7 +86,7 @@ public class AlipayAuto {
 
     private AlipayRecordDTO grabData(WebElement trEle) throws Exception {
         AlipayRecordDTO dto = new AlipayRecordDTO();
-        dto.setId(uidGenerator.getUID());
+        dto.setId(defaultUidGenerator.getUID());
         dto.setUserCode("xych");
         dto.setConsumeTime(grabConsumeTime(trEle));
         dto.setConsumeTitle(grabConsumeTitle(trEle));

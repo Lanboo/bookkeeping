@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import tk.mybatis.spring.annotation.MapperScan;
 
-@SpringBootApplication(scanBasePackages = {"com.xych.bookkeeping.app", "com.xych.bookkeeping.dao"})
+@SpringBootApplication(scanBasePackages = { "com.xych.bookkeeping.app", "com.xych.bookkeeping.dao" })
 // 扫描jar中的mapper
-@MapperScan(basePackages = {"com.xych.bookkeeping.dao.mapper"})
+@MapperScan(basePackages = { "com.xych.bookkeeping.dao.mapper", "com.xych.uid.worker.dao" })
 @EnableTransactionManagement
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
