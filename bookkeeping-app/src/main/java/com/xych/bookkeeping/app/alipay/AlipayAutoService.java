@@ -37,7 +37,7 @@ public class AlipayAutoService {
     }
 
     public void grab(Date startDate, Date endDate, Boolean login) {
-        driver = WebDriverFactory.newInstance(false);
+        driver = WebDriverFactory.newInstance(true);
         try {
             if(login) {
                 login("SAOMA");
