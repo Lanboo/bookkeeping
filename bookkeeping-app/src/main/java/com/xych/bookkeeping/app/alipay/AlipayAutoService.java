@@ -20,7 +20,7 @@ import com.xych.bookkeeping.dao.service.AlipayRecordServcie;
 import com.xych.uid.UidGenerator;
 
 @Service
-public class AlipayAuto {
+public class AlipayAutoService {
     private static final long intervalMillis = 500L;
     private WebDriver driver;
     private String userName = "";
@@ -33,7 +33,7 @@ public class AlipayAuto {
     public static void main(String[] args) {
         Date startDate = new Date();
         Date endDate = new Date();
-        new AlipayAuto().grab(startDate, endDate, true);
+        new AlipayAutoService().grab(startDate, endDate, true);
     }
 
     public void grab(Date startDate, Date endDate, Boolean login) {
@@ -63,9 +63,30 @@ public class AlipayAuto {
         for(; tempDt.compareTo(endDateTime) <= 0; tempDt = tempDt.plusDays(1)) {
             String dateStr = tempDt.toString("yyyy.MM.dd");
             selectRangAndSearch(dateStr, dateStr);
-            List<AlipayRecordDTO> dtoList = grabDataList();
-            alipayRecordServcie.addList(dtoList);
+            do {
+                List<AlipayRecordDTO> dtoList = grabDataList();
+                alipayRecordServcie.addList(dtoList);
+            }
+            while(hasNextPageAndClick());
         }
+    }
+
+    /**
+     * 是否存在下一页，存在的话跳转到下一页
+     * @CreateDate 2020年1月14日上午10:47:49
+     */
+    private boolean hasNextPageAndClick() {
+        boolean b = false;
+        try {
+            WebElement nextPageEle = driver.findElement(By.cssSelector("a.page-next[seed=pageLink-pageNextT1]"));
+            b = true;
+            nextPageEle.click();
+            Thread.sleep(1000);
+        }
+        catch(Exception e) {
+            b = false;
+        }
+        return b;
     }
 
     /**
