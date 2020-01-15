@@ -258,7 +258,7 @@ public class AlipayAutoService {
      */
     private String grabConsumeTime(WebElement trEle) {
         String titleHref = trEle.findElement(By.cssSelector(".name > .consume-title > a")).getAttribute("href").trim();
-        String timeStr = titleHref.substring(titleHref.lastIndexOf("=")).trim();
+        String timeStr = titleHref.substring(titleHref.lastIndexOf("=") + 1).trim();
         return timeStr;
     }
 
