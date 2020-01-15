@@ -14,11 +14,15 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xych.bookkeeping.app.common.support.UserSupport;
 import com.xych.bookkeeping.app.common.utils.InputUtils;
 import com.xych.bookkeeping.dao.dto.AlipayRecordDTO;
 import com.xych.bookkeeping.dao.service.AlipayRecordServcie;
 import com.xych.uid.UidGenerator;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class AlipayAutoService {
     private static final long intervalMillis = 500L;
@@ -29,6 +33,8 @@ public class AlipayAutoService {
     private AlipayRecordServcie alipayRecordServcie;
     @Autowired
     private UidGenerator defaultUidGenerator;
+    @Autowired
+    private UserSupport userSupport;
 
     public static void main(String[] args) {
         Date startDate = new Date();
@@ -71,6 +77,7 @@ public class AlipayAutoService {
         DateTime endDateTime = new DateTime(endDate.getTime());
         for(; tempDt.compareTo(endDateTime) <= 0; tempDt = tempDt.plusDays(1)) {
             String dateStr = tempDt.toString("yyyy.MM.dd");
+            log.info("正在抓取[{}]的数据", dateStr);
             selectRangAndSearch(dateStr, dateStr);
             do {
                 List<AlipayRecordDTO> dtoList = grabDataList();
@@ -110,6 +117,7 @@ public class AlipayAutoService {
         List<WebElement> trEles = tableEle.findElements(By.className("J-item"));
         for(WebElement trEle : trEles) {
             AlipayRecordDTO dto = grabData(trEle);
+            log.info("{}", dto);
             Thread.sleep(500);
             dtoList.add(dto);
         }
@@ -119,7 +127,7 @@ public class AlipayAutoService {
     private AlipayRecordDTO grabData(WebElement trEle) throws Exception {
         AlipayRecordDTO dto = new AlipayRecordDTO();
         dto.setId(defaultUidGenerator.getUID());
-        dto.setUserCode("xych");
+        dto.setUserCode(userSupport.getUser().getUserCode());
         dto.setConsumeTime(grabConsumeTime(trEle));
         dto.setConsumeTitle(grabConsumeTitle(trEle));
         String[] tradeStrs = grabTrade(trEle);
@@ -146,7 +154,6 @@ public class AlipayAutoService {
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
         dto.setOperator("system");
-        System.out.println(dto);
         return dto;
     }
 
