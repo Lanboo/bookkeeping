@@ -28,9 +28,9 @@
     </root>
 
     <!-- 打印sql语句 -->
-    <!-- <logger name="com.kltong.opc.business.dao" level="DEBUG" /> -->
+    <!-- <logger name="com.xych.bookkeeping.dao" level="DEBUG" /> -->
 
     <!-- 关闭DubboMonitor的日志打印 日志级别：OFF-关闭 -->
-    <logger name="com.alibaba.dubbo.monitor.dubbo.DubboMonitor" level="OFF" />
+    <!-- <logger name="com.alibaba.dubbo.monitor.dubbo.DubboMonitor" level="OFF" /> -->
 
 </configuration>
