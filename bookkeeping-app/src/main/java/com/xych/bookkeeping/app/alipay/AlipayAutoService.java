@@ -44,6 +44,7 @@ public class AlipayAutoService {
      * @CreateDate 2020年1月15日上午11:49:25
      */
     public void grab(Date startDate, Date endDate, Boolean newOpen, Boolean login) {
+        login = newOpen ? newOpen : login;
         driver = WebDriverFactory.newInstance(newOpen);
         try {
             if(login) {
