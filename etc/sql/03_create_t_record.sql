@@ -9,7 +9,7 @@ CREATE TABLE t_record
     account_type BIGINT COMMENT '账户',
     record_time CHAR(14) COMMENT '时间',
     record_desc VARCHAR(256) COMMENT '备注',
-    member VARCHAR(256) COMMENT '成员(允许多成员平摊)',
+    family_member VARCHAR(256) COMMENT '成员(允许多成员平摊)',
     alipay_record_id BIGINT COMMENT '支付宝流水表ID',
     crt_time DATETIME COMMENT '更新时间',
     upt_time DATETIME COMMENT '修改时间',
