@@ -18,8 +18,8 @@ public class AlipayAutoController {
 
     @PostMapping("/grab")
     @ResponseBody
-    public String grab(Date startDate, Date endDate, Boolean login) {
-        alipayAutoService.grab(startDate, endDate, login);
+    public String grab(Date startDate, Date endDate, Boolean newOpen, Boolean login) {
+        alipayAutoService.grab(startDate, endDate, newOpen, login);
         return "SUCCESS";
     }
 }

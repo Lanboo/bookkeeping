@@ -33,13 +33,21 @@ public class AlipayAutoService {
     public static void main(String[] args) {
         Date startDate = new Date();
         Date endDate = new Date();
-        new AlipayAutoService().grab(startDate, endDate, true);
+        new AlipayAutoService().grab(startDate, endDate, true, true);
     }
 
-    public void grab(Date startDate, Date endDate, Boolean login) {
-        driver = WebDriverFactory.newInstance(true);
+    /**
+     * @param startDate 开始日期
+     * @param endDate 结束日期（包含）
+     * @param newOpen 是否重新打开一个Chrome应用
+     * @param login 是否重新登录
+     * @CreateDate 2020年1月15日上午11:49:25
+     */
+    public void grab(Date startDate, Date endDate, Boolean newOpen, Boolean login) {
+        driver = WebDriverFactory.newInstance(newOpen);
         try {
             if(login) {
+                // 扫描登录
                 login("SAOMA");
             }
             openRecordPage();
@@ -79,9 +87,11 @@ public class AlipayAutoService {
         boolean b = false;
         try {
             WebElement nextPageEle = driver.findElement(By.cssSelector("a.page-next[seed=pageLink-pageNextT1]"));
-            b = true;
-            nextPageEle.click();
-            Thread.sleep(1000);
+            if(nextPageEle != null) {
+                b = true;
+                nextPageEle.click();
+                Thread.sleep(1000);
+            }
         }
         catch(Exception e) {
             b = false;
