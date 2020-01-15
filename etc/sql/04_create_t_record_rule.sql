@@ -8,5 +8,5 @@ CREATE TABLE t_record_rule
     crt_time DATETIME COMMENT '更新时间',
     upt_time DATETIME COMMENT '修改时间',
     PRIMARY KEY (ID),
-    UNIQUE KEY uk_t_record_rule (user_code,target_field)
+    UNIQUE KEY uk_t_record_rule (user_code,target_field,target_field_value)
 ) COMMENT '记录转换规则';
