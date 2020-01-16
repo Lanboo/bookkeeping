@@ -22,6 +22,10 @@ public class RecordRule extends BaseEntity {
      */
     private String userCode;
     /**
+     * 业务场景
+     */
+    private String busiType;
+    /**
      * 目标字段
      */
     private String targetField;
