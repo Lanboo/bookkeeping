@@ -35,22 +35,22 @@ public class RuleLoader {
     /**
      * 重新加载所有规则
      */
-    public void reload(BusiTypeEnum busiType, String id, String sceneId) {
-        List<RuleInfo> ruleInfos = this.ruleService.find(busiType, id, sceneId);
+    public void reload(String sceneId, String id) {
+        List<RuleInfo> ruleInfos = this.ruleService.find(sceneId, id);
         if(CollectionUtils.isEmpty(ruleInfos)) {
             // TODO 抛出一个明确的自定义异常
             throw new RuntimeException();
         }
-        String kbaseName = busiType.getCode() + "_" + id + "_" + sceneId;
+        String kbaseName = sceneId + "_" + id;
         //
         KieModuleModel kieModuleModel = kieServices.newKieModuleModel();
         KieBaseModel kieBaseModel = kieModuleModel.newKieBaseModel(kbaseName);
         kieBaseModel.setDefault(true);
-        kieBaseModel.addPackage(RuleUtil.drlPackage(busiType, id, sceneId));
+        kieBaseModel.addPackage(RuleUtil.drlPackage(sceneId, id));
         kieBaseModel.newKieSessionModel(kbaseName);
         //
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
-        String path = RuleUtil.drlPath(busiType, id, sceneId);
+        String path = RuleUtil.drlPath(sceneId, id);
         for(RuleInfo ruleInfo : ruleInfos) {
             kieFileSystem.write(path, ruleInfo.getContent());
         }

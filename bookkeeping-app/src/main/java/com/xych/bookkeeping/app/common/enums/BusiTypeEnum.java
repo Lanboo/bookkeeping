@@ -1,8 +1,12 @@
 package com.xych.bookkeeping.app.common.enums;
 
+/**
+ * 业务类型
+ * @CreateDate 2020年1月17日下午3:40:06
+ */
 public enum BusiTypeEnum {
-    WEB2ALIPAY("web2alipay", "网页抓取支付宝数据"),
-    ALIPAY2RECORD("alipay2record", "支付宝数据转系统数据"),
+    WEB2ALIPAY("WEB2ALIPAY", "网页抓取支付宝数据"),
+    ALIPAY2RECORD("ALIPAY2RECORD", "支付宝数据转系统数据"),
     //
     ;
 
