@@ -13,7 +13,7 @@ import com.xych.bookkeeping.dao.service.RecordRuleDetailServcie;
 
 import tk.mybatis.mapper.entity.Example;
 
-@Service("recordRuleServcie")
+@Service("recordRuleDetailServcie")
 public class RecordRuleDetailServiceImpl implements RecordRuleDetailServcie {
     @Autowired
     private RecordRuleDetailMapper mapper;
