@@ -12,6 +12,7 @@ CREATE TABLE t_alipay_record
     status VARCHAR(16) COMMENT '状态',
     fund_tool VARCHAR(16) COMMENT '流入流出账户',
     fund_tool_from VARCHAR(16) COMMENT '流出账户',
+    memo VARCHAR(256) COMMENT '备注',
     crt_time DATETIME COMMENT '更新时间',
     upt_time DATETIME COMMENT '修改时间',
     operator VARCHAR(32) COMMENT '操作人',

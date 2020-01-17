@@ -63,6 +63,10 @@ public class AlipayRecord extends BaseEntity {
      */
     private String fundToolFrom;
     /**
+     * 备注
+     */
+    private String memo;
+    /**
      * 创建时间
      */
     private Date crtTime;

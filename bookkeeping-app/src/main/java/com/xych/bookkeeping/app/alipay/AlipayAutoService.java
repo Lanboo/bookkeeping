@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -129,6 +130,7 @@ public class AlipayAutoService {
         dto.setId(defaultUidGenerator.getUID());
         dto.setUserCode(userSupport.getUser().getUserCode());
         dto.setConsumeTime(grabConsumeTime(trEle));
+        dto.setMemo(grabMemo(trEle));
         dto.setConsumeTitle(grabConsumeTitle(trEle));
         String[] tradeStrs = grabTrade(trEle);
         if(tradeStrs.length > 1) {
@@ -257,6 +259,19 @@ public class AlipayAutoService {
     private String grabConsumeTitle(WebElement trEle) {
         String title = trEle.findElement(By.cssSelector(".name > .consume-title > a")).getText().trim();
         return title;
+    }
+
+    /**
+     * 抓取备注信息
+     * @Author WeiXiaowei
+     * @CreateDate 2020年1月17日上午11:05:46
+     */
+    private String grabMemo(WebElement trEle) {
+        WebElement tdEle = trEle.findElement(By.cssSelector("td.memo"));
+        if(StringUtils.isBlank(tdEle.getText())) {
+            return null;
+        }
+        return tdEle.findElement(By.cssSelector("#J-memo-cnt-4 > div > p.memo-info")).getText().trim();
     }
 
     /**
