@@ -78,13 +78,15 @@ public class AlipayAutoService {
         DateTime endDateTime = new DateTime(endDate.getTime());
         for(; tempDt.compareTo(endDateTime) <= 0; tempDt = tempDt.plusDays(1)) {
             String dateStr = tempDt.toString("yyyy.MM.dd");
-            log.info("正在抓取[{}]的数据", dateStr);
+            log.info("抓取[{}]的数据:START", dateStr);
             selectRangAndSearch(dateStr, dateStr);
             do {
                 List<AlipayRecordDTO> dtoList = grabDataList();
+                log.info("抓取[{}]的数据{}条", dateStr, dtoList.size());
                 alipayRecordServcie.addList(dtoList);
             }
             while(hasNextPageAndClick());
+            log.info("抓取[{}]的数据:END", dateStr);
         }
     }
 
@@ -118,7 +120,7 @@ public class AlipayAutoService {
         List<WebElement> trEles = tableEle.findElements(By.className("J-item"));
         for(WebElement trEle : trEles) {
             AlipayRecordDTO dto = grabData(trEle);
-            log.info("{}", dto);
+            // log.info("{}", dto);
             Thread.sleep(500);
             dtoList.add(dto);
         }
@@ -204,7 +206,13 @@ public class AlipayAutoService {
             dto.setFundTool(fundTool);
         }
         else {
-            String fundToolFrom = tdEleList.get(0).findElement(By.cssSelector(".fundTool > a")).getText().trim();
+            String fundToolFrom = null;
+            try {
+                fundToolFrom = tdEleList.get(0).findElement(By.cssSelector(".fundTool > a")).getText().trim();
+            }
+            catch(Exception e) {
+                fundToolFrom = tdEleList.get(0).findElement(By.cssSelector(".fundTool")).getText().trim();
+            }
             dto.setFundToolFrom(fundToolFrom);
             String fundTool = tdEleList.get(1).findElement(By.className("fundTool")).getText().trim();
             dto.setFundTool(fundTool);
