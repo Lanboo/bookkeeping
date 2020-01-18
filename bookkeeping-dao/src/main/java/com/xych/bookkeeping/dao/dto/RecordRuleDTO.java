@@ -31,7 +31,7 @@ public class RecordRuleDTO extends BaseDto {
     /**
      * 明细表达式
      */
-    private String ruleEngine;
+    private String expression;
     /**
      * 创建时间
      */

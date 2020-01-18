@@ -5,7 +5,7 @@ CREATE TABLE t_record_rule
     busi_type VARCHAR(32) COMMENT '业务场景',
     target_field VARCHAR(128) COMMENT '目标字段',
     target_field_value VARCHAR(128) COMMENT '输出结果',
-    rule_engine VARCHAR(256) COMMENT '明细表达式',
+    expression VARCHAR(256) COMMENT '明细表达式',
     crt_time DATETIME COMMENT '更新时间',
     upt_time DATETIME COMMENT '修改时间',
     PRIMARY KEY (ID),
