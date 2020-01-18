@@ -10,6 +10,9 @@ public enum ExceptionEnum {
     SYSTEM_TIMEOUT("S00002", "系统超时"),
     PARAM_ERROR("S00003", "参数错误"),
     //
+    R00001("R00001", "未配置规则"),
+    R00002("R00002", "配置的规则错误"),
+    //
     ;
 
     private String code;

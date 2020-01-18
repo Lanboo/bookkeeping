@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
@@ -16,10 +15,15 @@ import org.kie.api.runtime.KieContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.xych.bookkeeping.app.common.enums.ExceptionEnum;
+import com.xych.bookkeeping.app.common.exception.BusiException;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
 import com.xych.bookkeeping.app.drools.service.RuleService;
 import com.xych.bookkeeping.app.drools.utils.RuleUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class RuleLoader {
     private final KieServices kieServices = KieServices.Factory.get();
@@ -36,10 +40,6 @@ public class RuleLoader {
      */
     public void reload(String sceneId, String id) {
         List<RuleInfo> ruleInfos = this.ruleService.find(sceneId, id);
-        if(CollectionUtils.isEmpty(ruleInfos)) {
-            // TODO 抛出一个明确的自定义异常
-            throw new RuntimeException();
-        }
         String kbaseName = sceneId + "_" + id;
         //
         KieModuleModel kieModuleModel = kieServices.newKieModuleModel();
@@ -59,8 +59,8 @@ public class RuleLoader {
         //
         Results results = kieBuilder.getResults();
         if(results.hasMessages(Message.Level.ERROR)) {
-            // TODO 抛出一个明确的自定义异常
-            throw new IllegalStateException("rule error");
+            log.info("配置的规则解析错误:sceneId={},id", sceneId, id);
+            throw new BusiException(ExceptionEnum.R00002);
         }
         //
         KieContainer kieContainer = kieServices.newKieContainer(kieServices.getRepository().getDefaultReleaseId());
