@@ -16,7 +16,6 @@ import org.kie.api.runtime.KieContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.xych.bookkeeping.app.common.enums.BusiTypeEnum;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
 import com.xych.bookkeeping.app.drools.service.RuleService;
 import com.xych.bookkeeping.app.drools.utils.RuleUtil;
