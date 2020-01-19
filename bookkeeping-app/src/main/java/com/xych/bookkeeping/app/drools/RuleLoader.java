@@ -9,8 +9,6 @@ import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.Message;
 import org.kie.api.builder.Results;
-import org.kie.api.builder.model.KieBaseModel;
-import org.kie.api.builder.model.KieModuleModel;
 import org.kie.api.runtime.KieContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,25 +53,18 @@ public class RuleLoader {
         String kbaseName = busiType + "_" + id;
         String busiTypeTemp = busiType.toLowerCase();
         //
-        KieModuleModel kieModuleModel = kieServices.newKieModuleModel();
-        KieBaseModel kieBaseModel = kieModuleModel.newKieBaseModel(kbaseName);
-        kieBaseModel.setDefault(true);
-        kieBaseModel.addPackage(RuleUtil.drlPackage(busiTypeTemp, id));
-        kieBaseModel.newKieSessionModel(kbaseName);
-        //
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
         String basePath = RuleUtil.drlPath(busiTypeTemp, id);
         for(RuleInfo ruleInfo : ruleInfos) {
             String path = basePath + "/" + ruleInfo.getSceneId() + ".drl";
             kieFileSystem.write(path, ruleInfo.getContent());
         }
-        kieFileSystem.writeKModuleXML(kieModuleModel.toXML());
-        //
+        // 将KieFileSystem加入到KieBuilder，并编译
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem).buildAll();
         //
         Results results = kieBuilder.getResults();
         if(results.hasMessages(Message.Level.ERROR)) {
-            log.info("配置的规则解析错误:sceneId={},id", busiTypeTemp, id);
+            log.info("配置的规则解析错误:sceneId={},id", busiType, id);
             throw new BusiException(ExceptionEnum.R00002);
         }
         //
