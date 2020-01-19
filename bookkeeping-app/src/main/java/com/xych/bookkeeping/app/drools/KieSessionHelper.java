@@ -10,6 +10,6 @@ public class KieSessionHelper {
     private RuleLoader ruleLoader;
 
     public KieSession getKieSession(String busiType, String id) {
-        return ruleLoader.getKieContainer(busiType, id).getKieBase().newKieSession();
+        return ruleLoader.getKieContainer(busiType, id).newKieSession();
     }
 }

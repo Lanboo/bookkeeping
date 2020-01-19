@@ -91,7 +91,7 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
         builder.append(LINE_SEPARATOR);
         buildImports(builder);
         builder.append(LINE_SEPARATOR);
-        builder.append("global ").append(targetClass().getSimpleName()).append(" target;").append(LINE_SEPARATOR);
+        builder.append("global ").append(targetClass().getSimpleName()).append(" target").append(LINE_SEPARATOR);
         builder.append(LINE_SEPARATOR);
         return builder;
     }
