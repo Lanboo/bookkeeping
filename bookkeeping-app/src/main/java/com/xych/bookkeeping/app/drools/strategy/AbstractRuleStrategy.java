@@ -20,8 +20,9 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
     @Override
     public RuleInfo buildRule(List<RecordRuleDTO> ruleList, Map<Long, List<RecordRuleDetailDTO>> ruleDetailDtosMap) {
         RuleInfo ruleInfo = RuleInfo.builder() //
-            .sceneId(ruleList.get(0).getBusiType())//
+            .busiType(ruleList.get(0).getBusiType())//
             .id(ruleList.get(0).getUserCode())//
+            .sceneId(ruleList.get(0).getTargetField())//
             .build();
         StringBuilder builder = buildStrBuilder(ruleInfo);
         for(RecordRuleDTO rule : ruleList) {
@@ -86,11 +87,11 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
      */
     protected StringBuilder buildStrBuilder(RuleInfo ruleInfo) {
         StringBuilder builder = new StringBuilder();
-        builder.append("package ").append(RuleUtil.drlPackage(ruleInfo.getSceneId().toLowerCase(), ruleInfo.getId())).append(LINE_SEPARATOR);
+        builder.append("package ").append(RuleUtil.drlPackage(ruleInfo.getBusiType().toLowerCase(), ruleInfo.getId())).append(LINE_SEPARATOR);
         builder.append(LINE_SEPARATOR);
         buildImports(builder);
         builder.append(LINE_SEPARATOR);
-        builder.append("global ").append(targetClass().getName()).append(" target;").append(LINE_SEPARATOR);
+        builder.append("global ").append(targetClass().getSimpleName()).append(" target;").append(LINE_SEPARATOR);
         builder.append(LINE_SEPARATOR);
         return builder;
     }

@@ -10,13 +10,17 @@ import lombok.Data;
 public class RuleInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * 场景id，一个场景对应多个规则，一个场景对应一个业务场景，一个场景对应一个kmodule
+     * 业务场景
      */
-    private String sceneId;
+    private String busiType;
     /**
-     * 规则id，全局唯一
+     * 规则id，用户id
      */
     private String id;
+    /**
+     * 场景id
+     */
+    private String sceneId;
     /**
      * 规则内容，既drl文件内容
      */

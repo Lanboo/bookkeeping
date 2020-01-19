@@ -25,7 +25,7 @@ public class Alipay2RecodRuleStrategy extends AbstractRuleStrategy {
     }
 
     public static void main(String[] args) {
-        RuleInfo ruleInfo = RuleInfo.builder().sceneId("ALIPAY2RECORD".toLowerCase()).id("xych").build();
+        RuleInfo ruleInfo = RuleInfo.builder().busiType("ALIPAY2RECORD".toLowerCase()).id("xych").build();
         System.out.println(new Alipay2RecodRuleStrategy().buildStrBuilder(ruleInfo));
     }
 }

@@ -35,22 +35,36 @@ public class RuleLoader {
     @Autowired
     private RuleService ruleService;
 
+    public KieContainer getKieContainer(String sceneId, String id) {
+        String kbaseName = sceneId + "_" + id;
+        KieContainer kieContainer = kieContainerMap.get(kbaseName);
+        if(kieContainer != null) {
+            return kieContainer;
+        }
+        else {
+            reload(sceneId, id);
+            return kieContainerMap.get(kbaseName);
+        }
+    }
+
     /**
      * 重新加载所有规则
      */
-    public void reload(String sceneId, String id) {
-        List<RuleInfo> ruleInfos = this.ruleService.find(sceneId, id);
-        String kbaseName = sceneId + "_" + id;
+    public void reload(String busiType, String id) {
+        List<RuleInfo> ruleInfos = this.ruleService.find(busiType, id);
+        String kbaseName = busiType + "_" + id;
+        String busiTypeTemp = busiType.toLowerCase();
         //
         KieModuleModel kieModuleModel = kieServices.newKieModuleModel();
         KieBaseModel kieBaseModel = kieModuleModel.newKieBaseModel(kbaseName);
         kieBaseModel.setDefault(true);
-        kieBaseModel.addPackage(RuleUtil.drlPackage(sceneId, id));
+        kieBaseModel.addPackage(RuleUtil.drlPackage(busiTypeTemp, id));
         kieBaseModel.newKieSessionModel(kbaseName);
         //
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
-        String path = RuleUtil.drlPath(sceneId, id);
+        String basePath = RuleUtil.drlPath(busiTypeTemp, id);
         for(RuleInfo ruleInfo : ruleInfos) {
+            String path = basePath + "/" + ruleInfo.getSceneId() + ".drl";
             kieFileSystem.write(path, ruleInfo.getContent());
         }
         kieFileSystem.writeKModuleXML(kieModuleModel.toXML());
@@ -59,7 +73,7 @@ public class RuleLoader {
         //
         Results results = kieBuilder.getResults();
         if(results.hasMessages(Message.Level.ERROR)) {
-            log.info("配置的规则解析错误:sceneId={},id", sceneId, id);
+            log.info("配置的规则解析错误:sceneId={},id", busiTypeTemp, id);
             throw new BusiException(ExceptionEnum.R00002);
         }
         //
