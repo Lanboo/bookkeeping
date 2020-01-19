@@ -18,6 +18,10 @@ public class RecordDTO extends BaseDto {
      */
     private String userCode;
     /**
+     * 业务场景
+     */
+    private String busiType;
+    /**
      * 账本
      */
     private String accountBook;

@@ -2,6 +2,7 @@ CREATE TABLE t_record
 (
     id BIGINT NOT NULL COMMENT 'id',
     user_code VARCHAR(32) COMMENT '用户代码',
+    busi_type VARCHAR(32) COMMENT '业务场景',
     account_book BIGINT COMMENT '账本',
     amount INT COMMENT '金额，分',
     flow TINYINT COMMENT '资金流向:1:收入,-1:支出,0:转账',
