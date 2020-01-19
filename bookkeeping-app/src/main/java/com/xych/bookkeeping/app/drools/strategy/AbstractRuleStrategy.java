@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
 import com.xych.bookkeeping.app.drools.utils.RuleUtil;
@@ -36,7 +37,11 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
      * @CreateDate 2020年1月19日上午11:04:51
      */
     protected void buildRule(StringBuilder builder, RecordRuleDTO rule, List<RecordRuleDetailDTO> ruleDetailList) {
-        builder.append("rule \"").append(rule.getId()).append("\"").append(LINE_SEPARATOR);
+        builder.append("rule \"")//
+            .append(rule.getBusiType().toLowerCase())//
+            .append("_").append(rule.getTargetField())//
+            .append("_").append(rule.getId())//
+            .append("\"").append(LINE_SEPARATOR);
         builder.append("no-loop true").append(LINE_SEPARATOR);
         builder.append("when").append(LINE_SEPARATOR);
         builder.append(buildLHS(rule, ruleDetailList)).append(LINE_SEPARATOR);
@@ -46,7 +51,7 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
     }
 
     protected String buildRHS(RecordRuleDTO rule) {
-        return null;
+        return MessageFormat.format("    target.set{0}(\"{1}\")", StringUtils.capitalize(rule.getTargetField()), rule.getTargetFieldValue());
     }
 
     /**
@@ -57,8 +62,7 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
         if(CollectionUtils.isEmpty(ruleDetailList)) {
             return "";
         }
-        String originClassName = originClass().getSimpleName();
-        String expression = originClassName + "(" + rule.getExpression() + ")";
+        String expression = "    " + rule.getExpression();
         return MessageFormat.format(expression, buildConditions(ruleDetailList));
     }
 
@@ -68,10 +72,12 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
             .collect(Collectors.toList());
         Object[] conditions = new Object[ruleDetails.size()];
         int idx = 0;
+        String expression = originClass().getSimpleName() + "({0} {1} \"{2}\")";
         for(RecordRuleDetailDTO ruleDetail : ruleDetails) {
-            conditions[idx] = MessageFormat.format("{1} {2} {3}", ruleDetail.getOriginField(), ruleDetail.getOriginOperator(), ruleDetail.getOriginFieldValue());
+            conditions[idx] = MessageFormat.format(expression, ruleDetail.getOriginField(), ruleDetail.getOriginOperator(), ruleDetail.getOriginFieldValue());
+            idx++;
         }
-        return null;
+        return conditions;
     }
 
     /**
@@ -83,6 +89,8 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
         builder.append("package ").append(RuleUtil.drlPackage(ruleInfo.getSceneId().toLowerCase(), ruleInfo.getId())).append(LINE_SEPARATOR);
         builder.append(LINE_SEPARATOR);
         buildImports(builder);
+        builder.append(LINE_SEPARATOR);
+        builder.append("global ").append(targetClass().getName()).append(" target;").append(LINE_SEPARATOR);
         builder.append(LINE_SEPARATOR);
         return builder;
     }

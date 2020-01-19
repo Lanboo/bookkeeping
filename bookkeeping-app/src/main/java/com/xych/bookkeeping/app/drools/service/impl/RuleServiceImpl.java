@@ -51,6 +51,7 @@ public class RuleServiceImpl implements RuleService {
         sceneRuleMap.forEach((str, ruleList) -> {
             ruleInfos.add(buildRuleInfo(ruleList, ruleDetailDtosMap));
         });
+        log.info("规则配置:sceneId={},id={},rules={}", sceneId, id, ruleInfos);
         return ruleInfos;
     }
 
