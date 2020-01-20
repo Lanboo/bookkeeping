@@ -9,6 +9,8 @@ import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.Message;
 import org.kie.api.builder.Results;
+import org.kie.api.builder.model.KieBaseModel;
+import org.kie.api.builder.model.KieModuleModel;
 import org.kie.api.runtime.KieContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,14 +35,14 @@ public class RuleLoader {
     @Autowired
     private RuleService ruleService;
 
-    public KieContainer getKieContainer(String sceneId, String id) {
-        String kbaseName = sceneId + "_" + id;
+    public KieContainer getKieContainer(String busiType, String id) {
+        String kbaseName = busiType + "_" + id;
         KieContainer kieContainer = kieContainerMap.get(kbaseName);
         if(kieContainer != null) {
             return kieContainer;
         }
         else {
-            reload(sceneId, id);
+            reload(busiType, id);
             return kieContainerMap.get(kbaseName);
         }
     }
@@ -53,18 +55,25 @@ public class RuleLoader {
         String kbaseName = busiType + "_" + id;
         String busiTypeTemp = busiType.toLowerCase();
         //
+        KieModuleModel kieModuleModel = kieServices.newKieModuleModel();
+        KieBaseModel kieBaseModel = kieModuleModel.newKieBaseModel(kbaseName);
+        kieBaseModel.setDefault(true);
+        kieBaseModel.addPackage(RuleUtil.drlPackage(busiTypeTemp, id));
+        kieBaseModel.newKieSessionModel(kbaseName);
+        //
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
         String basePath = RuleUtil.drlPath(busiTypeTemp, id);
         for(RuleInfo ruleInfo : ruleInfos) {
             String path = basePath + "/" + ruleInfo.getSceneId() + ".drl";
             kieFileSystem.write(path, ruleInfo.getContent());
         }
-        // 将KieFileSystem加入到KieBuilder，并编译
+        kieFileSystem.writeKModuleXML(kieModuleModel.toXML());
+        //
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem).buildAll();
         //
         Results results = kieBuilder.getResults();
         if(results.hasMessages(Message.Level.ERROR)) {
-            log.info("配置的规则解析错误:sceneId={},id", busiType, id);
+            log.info("配置的规则解析错误:sceneId={},id={},results={}", busiType, id, results.getMessages());
             throw new BusiException(ExceptionEnum.R00002);
         }
         //

@@ -52,7 +52,7 @@ public class RuleTestController {
         for(AlipayRecordDTO alipayRecord : alipayRecords) {
             log.info("alipayRecord={}", alipayRecord);
             RecordDTO recordDto = new RecordDTO();
-            kieSession.setGlobal("target", recordDto);
+            kieSession.setGlobal("targetObject", recordDto);
             kieSession.insert(alipayRecord);
             kieSession.fireAllRules();
             log.info("recordDto={}", recordDto);

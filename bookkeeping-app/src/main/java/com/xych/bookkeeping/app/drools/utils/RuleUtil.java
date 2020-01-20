@@ -13,6 +13,6 @@ public class RuleUtil {
     }
 
     public static String drlPath(String sceneId, String id) {
-        return MessageFormat.format("rules/{0}/{1}", sceneId, id);
+        return MessageFormat.format("src/main/resources/rules/{0}/{1}", sceneId, id);
     }
 }

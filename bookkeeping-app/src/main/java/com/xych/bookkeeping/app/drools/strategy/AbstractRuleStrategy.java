@@ -7,15 +7,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.xych.bookkeeping.app.common.enums.ExceptionEnum;
+import com.xych.bookkeeping.app.common.exception.BusiException;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
 import com.xych.bookkeeping.app.drools.utils.RuleUtil;
 import com.xych.bookkeeping.dao.dto.RecordRuleDTO;
 import com.xych.bookkeeping.dao.dto.RecordRuleDetailDTO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public abstract class AbstractRuleStrategy extends RuleStrategy {
     protected static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    protected static final String SEMICOLON = ";";
 
     @Override
     public RuleInfo buildRule(List<RecordRuleDTO> ruleList, Map<Long, List<RecordRuleDetailDTO>> ruleDetailDtosMap) {
@@ -43,7 +50,7 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
             .append("_").append(rule.getTargetField())//
             .append("_").append(rule.getId())//
             .append("\"").append(LINE_SEPARATOR);
-        builder.append("no-loop true").append(LINE_SEPARATOR);
+        //        builder.append("no-loop true").append(LINE_SEPARATOR);
         builder.append("when").append(LINE_SEPARATOR);
         builder.append(buildLHS(rule, ruleDetailList)).append(LINE_SEPARATOR);
         builder.append("then").append(LINE_SEPARATOR);
@@ -52,7 +59,33 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
     }
 
     protected String buildRHS(RecordRuleDTO rule) {
-        return MessageFormat.format("    target.set{0}(\"{1}\")", StringUtils.capitalize(rule.getTargetField()), rule.getTargetFieldValue());
+        return MessageFormat.format("    targetObject.set{0}({1});", StringUtils.capitalize(rule.getTargetField()), buildFieldValueStr(rule));
+    }
+
+    /**
+     * 根据目标字段，判断该类型，从而决定是否添加双引号，Long后面添加L
+     * @CreateDate 2020年1月20日上午10:55:37
+     */
+    private String buildFieldValueStr(RecordRuleDTO rule) {
+        try {
+            String valueStr = rule.getTargetFieldValue();
+            Class<?> fieldClass = targetClass().getDeclaredField(rule.getTargetField()).getType();
+            if(ClassUtils.isAssignable(fieldClass, Boolean.class)) {
+                return valueStr;
+            }
+            if(ClassUtils.isAssignable(fieldClass, Long.class)) {
+                return valueStr + "L";
+            }
+            if(ClassUtils.isAssignable(fieldClass, String.class)) {
+                return "\"" + valueStr + "\"";
+            }
+            log.info("规则配置错误:目标类型的字段目前只支持Long、String、Boolean:targetClass={},targetField={}", targetClass(), rule.getTargetField());
+            throw new BusiException(ExceptionEnum.R00003);
+        }
+        catch(NoSuchFieldException | SecurityException e) {
+            log.info("规则配置错误:类{}不存在{}字段", targetClass(), rule.getTargetField());
+            throw new BusiException(ExceptionEnum.R00003);
+        }
     }
 
     /**
@@ -87,18 +120,18 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
      */
     protected StringBuilder buildStrBuilder(RuleInfo ruleInfo) {
         StringBuilder builder = new StringBuilder();
-        builder.append("package ").append(RuleUtil.drlPackage(ruleInfo.getBusiType().toLowerCase(), ruleInfo.getId())).append(LINE_SEPARATOR);
+        builder.append("package ").append(RuleUtil.drlPackage(ruleInfo.getBusiType().toLowerCase(), ruleInfo.getId())).append(SEMICOLON).append(LINE_SEPARATOR);
         builder.append(LINE_SEPARATOR);
         buildImports(builder);
         builder.append(LINE_SEPARATOR);
-        builder.append("global ").append(targetClass().getSimpleName()).append(" target").append(LINE_SEPARATOR);
+        builder.append("global ").append(targetClass().getName()).append(" targetObject").append(SEMICOLON).append(LINE_SEPARATOR);
         builder.append(LINE_SEPARATOR);
         return builder;
     }
 
     protected void buildImports(StringBuilder builder) {
-        builder.append("import ").append(originClass().getName()).append(LINE_SEPARATOR);
-        builder.append("import ").append(targetClass().getName()).append(LINE_SEPARATOR);
+        builder.append("import ").append(originClass().getName()).append(SEMICOLON).append(LINE_SEPARATOR);
+        builder.append("import ").append(targetClass().getName()).append(SEMICOLON).append(LINE_SEPARATOR);
     }
 
     protected abstract Class<?> originClass();
