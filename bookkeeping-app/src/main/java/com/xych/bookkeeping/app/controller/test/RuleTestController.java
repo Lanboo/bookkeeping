@@ -1,8 +1,13 @@
 package com.xych.bookkeeping.app.controller.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.kie.api.command.Command;
+import org.kie.api.runtime.ExecutionResults;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.StatelessKieSession;
+import org.kie.internal.command.CommandFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +61,23 @@ public class RuleTestController {
             kieSession.insert(alipayRecord);
             kieSession.fireAllRules();
             log.info("recordDto={}", recordDto);
+        }
+    }
+
+    @PostMapping("/test2")
+    @ResponseBody
+    public void test2(String busiType, String id) {
+        StatelessKieSession kieSession = kieSessionHelper.getStatelessKieSession(busiType, id);
+        List<AlipayRecordDTO> alipayRecords = this.alipayRecordServcie.findList(new AlipayRecordDTO());
+        for(AlipayRecordDTO alipayRecord : alipayRecords) {
+            //            log.info("alipayRecord={}", alipayRecord);
+            RecordDTO recordDto = new RecordDTO();
+            List<Command<?>> cmds = new ArrayList<>();
+            cmds.add(CommandFactory.newSetGlobal("targetObject", recordDto));
+            cmds.add(CommandFactory.newInsert(alipayRecord));
+            ExecutionResults results = kieSession.execute(CommandFactory.newBatchExecution(cmds));
+            log.info("recordDto={}", recordDto);
+            log.info("results={}", results);
         }
     }
 }
