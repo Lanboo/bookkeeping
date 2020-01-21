@@ -1,4 +1,4 @@
-CREATE TABLE t_family_member
+CREATE TABLE t_member
 (
     id BIGINT NOT NULL COMMENT 'id',
     user_code VARCHAR(32) COMMENT '用户代码',
