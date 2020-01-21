@@ -1,16 +1,21 @@
-package com.xych.bookkeeping.dao.dto;
+package com.xych.bookkeeping.dao.entity;
 
 import java.util.Date;
 
-import com.xych.bookkeeping.dao.base.dto.BaseDto;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.xych.bookkeeping.dao.base.entity.BaseEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UserDTO extends BaseDto {
+@Table(name = "t_user")
+public class User extends BaseEntity {
     private static final long serialVersionUID = 1L;
+    @Id
     private Long id;
     /**
      * 用户代码
