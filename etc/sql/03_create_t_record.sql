@@ -12,8 +12,8 @@ CREATE TABLE t_record
     record_desc VARCHAR(256) COMMENT '备注',
     family_member VARCHAR(256) COMMENT '成员(允许多成员平摊)',
     alipay_record_id BIGINT COMMENT '支付宝流水表ID',
-    crt_time DATETIME COMMENT '更新时间',
-    upt_time DATETIME COMMENT '修改时间',
+    crt_time DATETIME COMMENT '创建时间',
+    upt_time DATETIME COMMENT '更新时间',
     operator VARCHAR(32) COMMENT '操作人',
     PRIMARY KEY (ID),
     index idx_t_record (record_time)
