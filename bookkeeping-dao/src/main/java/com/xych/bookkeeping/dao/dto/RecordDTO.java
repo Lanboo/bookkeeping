@@ -24,7 +24,7 @@ public class RecordDTO extends BaseDto {
     /**
      * 账本
      */
-    private String accountBook;
+    private Long accountBook;
     /**
      * 金额，分
      */
