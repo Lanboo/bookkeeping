@@ -2,18 +2,20 @@ package com.xych.bookkeeping.dao.dto;
 
 import java.util.Date;
 
-import com.xych.bookkeeping.dao.base.dto.BaseDto;
+import com.xych.bookkeeping.dao.base.dto.BasePageDTO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 用户账本
  * @CreateDate 2020年1月21日下午4:40:36
  */
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BookDTO extends BaseDto {
+public class BookDTO extends BasePageDTO {
     private static final long serialVersionUID = 1L;
     private Long id;
     /**

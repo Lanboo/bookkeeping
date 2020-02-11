@@ -3,14 +3,16 @@ package com.xych.bookkeeping.dao.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.xych.bookkeeping.dao.base.dto.BaseDto;
+import com.xych.bookkeeping.dao.base.dto.BasePageDTO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class RecordDTO extends BaseDto {
+public class RecordDTO extends BasePageDTO {
     private static final long serialVersionUID = 1L;
     private Long id;
     /**

@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.xych.bookkeeping.dao.base.dto.Page;
 import com.xych.bookkeeping.dao.dto.BookDTO;
 import com.xych.bookkeeping.dao.entity.Book;
 import com.xych.bookkeeping.dao.mapper.BookMapper;
@@ -28,6 +31,14 @@ public class BookServiceImpl implements BookServcie {
     @Override
     public List<BookDTO> findList(BookDTO dto) {
         return converter.toDtoList(mapper.select(converter.toEntity(dto)));
+    }
+
+    @Override
+    public Page<BookDTO> findPage(BookDTO dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+        List<Book> entityList = mapper.select(converter.toEntity(dto));
+        PageInfo<Book> pageInfo = new PageInfo<>(entityList);
+        return new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), converter.toDtoList(entityList));
     }
 
     @Override
