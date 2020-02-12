@@ -12,8 +12,6 @@ import com.xych.bookkeeping.dao.base.service.BaseService;
 import tk.mybatis.mapper.entity.Example;
 
 public abstract class BaseServiceImpl<D extends BaseDTO, E extends BaseEntity> implements BaseService<D> {
-    protected BaseMapper<E> mapper;
-    protected BaseConverter<D, E> converter;
     private Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
@@ -22,28 +20,28 @@ public abstract class BaseServiceImpl<D extends BaseDTO, E extends BaseEntity> i
         entityClass = ((Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1]);
     }
 
-    protected abstract void setMapper(BaseMapper<E> mapper);
+    protected abstract BaseMapper<E> getMapper();
 
-    protected abstract void setConverter(BaseConverter<D, E> converter);
+    protected abstract BaseConverter<D, E> getConverter();
 
     @Override
     public D findOne(D dto) {
-        return converter.toDto(mapper.selectOne(converter.toEntity(dto)));
+        return getConverter().toDto(getMapper().selectOne(getConverter().toEntity(dto)));
     }
 
     @Override
     public List<D> findList(D dto) {
-        return converter.toDtoList(mapper.select(converter.toEntity(dto)));
+        return getConverter().toDtoList(getMapper().select(getConverter().toEntity(dto)));
     }
 
     @Override
     public Integer addOne(D dto) {
-        return mapper.insert(converter.toEntity(dto));
+        return getMapper().insert(getConverter().toEntity(dto));
     }
 
     @Override
     public Integer addList(List<D> dtos) {
-        return mapper.insertList(converter.toEntityList(dtos));
+        return getMapper().insertList(getConverter().toEntityList(dtos));
     }
 
     @Override
@@ -51,7 +49,7 @@ public abstract class BaseServiceImpl<D extends BaseDTO, E extends BaseEntity> i
         Example example = new Example(entityClass);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", dto.getId());//id
-        return mapper.updateByExampleSelective(converter.toEntity(dto), example);
+        return getMapper().updateByExampleSelective(getConverter().toEntity(dto), example);
     }
 
     @Override
@@ -59,7 +57,7 @@ public abstract class BaseServiceImpl<D extends BaseDTO, E extends BaseEntity> i
         Example example = new Example(entityClass);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", dto.getId());//id
-        return mapper.deleteByExample(example);
+        return getMapper().deleteByExample(example);
     }
 
 }

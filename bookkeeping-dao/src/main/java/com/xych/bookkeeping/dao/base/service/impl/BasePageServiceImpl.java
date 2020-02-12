@@ -13,8 +13,8 @@ public abstract class BasePageServiceImpl<D extends BasePageDTO, E extends BaseE
     @Override
     public Page<D> findPage(D dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        List<E> entityList = mapper.select(converter.toEntity(dto));
+        List<E> entityList = getMapper().select(getConverter().toEntity(dto));
         PageInfo<E> pageInfo = new PageInfo<>(entityList);
-        return new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), converter.toDtoList(entityList));
+        return new Page<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), getConverter().toDtoList(entityList));
     }
 }
