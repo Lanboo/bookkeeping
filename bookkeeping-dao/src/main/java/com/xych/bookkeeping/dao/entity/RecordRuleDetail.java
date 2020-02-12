@@ -1,6 +1,5 @@
 package com.xych.bookkeeping.dao.entity;
 
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.xych.bookkeeping.dao.base.entity.BaseEntity;
@@ -13,8 +12,6 @@ import lombok.EqualsAndHashCode;
 @Table(name = "t_record_rule_detail")
 public class RecordRuleDetail extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    @Id
-    private Long id;
     /**
      * 规则Id
      */

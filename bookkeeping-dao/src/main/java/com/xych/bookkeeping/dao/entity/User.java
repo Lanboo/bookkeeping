@@ -2,7 +2,6 @@ package com.xych.bookkeeping.dao.entity;
 
 import java.util.Date;
 
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.xych.bookkeeping.dao.base.entity.BaseEntity;
@@ -15,8 +14,6 @@ import lombok.EqualsAndHashCode;
 @Table(name = "t_user")
 public class User extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    @Id
-    private Long id;
     /**
      * 用户代码
      */

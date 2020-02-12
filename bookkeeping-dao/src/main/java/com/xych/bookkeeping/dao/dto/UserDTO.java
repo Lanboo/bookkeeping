@@ -13,7 +13,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class UserDTO extends BasePageDTO {
     private static final long serialVersionUID = 1L;
-    private Long id;
     /**
      * 用户代码
      */
