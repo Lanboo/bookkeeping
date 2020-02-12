@@ -2,9 +2,9 @@ package com.xych.bookkeeping.dao.base.service;
 
 import java.util.List;
 
-import com.xych.bookkeeping.dao.base.dto.BaseDto;
+import com.xych.bookkeeping.dao.base.dto.BaseDTO;
 
-public interface BaseService<T extends BaseDto> {
+public interface BaseService<T extends BaseDTO> {
     T findOne(T dto);
 
     List<T> findList(T dto);

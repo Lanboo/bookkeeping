@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.mapstruct.InheritConfiguration;
 
-import com.xych.bookkeeping.dao.base.dto.BaseDto;
+import com.xych.bookkeeping.dao.base.dto.BaseDTO;
 import com.xych.bookkeeping.dao.base.entity.BaseEntity;
 
-public interface BaseConverter<D extends BaseDto, E extends BaseEntity> {
+public interface BaseConverter<D extends BaseDTO, E extends BaseEntity> {
     D toDto(E entity);
 
     @InheritConfiguration
