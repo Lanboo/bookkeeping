@@ -12,10 +12,6 @@ import lombok.EqualsAndHashCode;
 public class BookVO extends BaseVO {
     private static final long serialVersionUID = 1L;
     /**
-     * ID
-     */
-    private String id;
-    /**
      * 用户代码
      */
     private String userCode;
