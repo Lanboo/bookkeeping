@@ -16,9 +16,6 @@ import com.xych.bookkeeping.dao.base.dto.Page;
 import com.xych.bookkeeping.dao.dto.BookDTO;
 import com.xych.bookkeeping.dao.service.BookServcie;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
 @RequestMapping("book")
 public class BookController {
@@ -31,7 +28,6 @@ public class BookController {
     @ResponseBody
     public PageVO<BookVO> query(@Valid @RequestBody BookVO book) {
         Page<BookDTO> dtoPage = this.bookService.findPage(voConverter.toDto(book));
-        log.info("{}", dtoPage);
         return new PageVO<>(dtoPage.getPageNum(), dtoPage.getPageSize(), dtoPage.getTotal(), voConverter.toVoList(dtoPage.getData()));
     }
 }
