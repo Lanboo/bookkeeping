@@ -2,14 +2,16 @@ package com.xych.bookkeeping.app.vo.book;
 
 import java.util.Date;
 
-import com.xych.bookkeeping.app.vo.base.BaseVO;
+import com.xych.bookkeeping.app.vo.base.BasePageVO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BookVO extends BaseVO {
+public class BookVO extends BasePageVO {
     private static final long serialVersionUID = 1L;
     /**
      * 用户代码

@@ -12,7 +12,7 @@ public class BasePageVO extends BaseVO {
     /**
      * 当前页
      */
-    private Integer pageNum;
+    private Integer current;
     /**
      * 每页数量
      */
