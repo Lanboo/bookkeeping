@@ -2,6 +2,7 @@ package com.xych.bookkeeping.dao.base.service.impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Objects;
 
 import com.xych.bookkeeping.dao.base.dto.BaseDTO;
 import com.xych.bookkeeping.dao.base.entity.BaseEntity;
@@ -12,7 +13,7 @@ import com.xych.bookkeeping.dao.base.service.BaseService;
 import tk.mybatis.mapper.entity.Example;
 
 public abstract class BaseServiceImpl<D extends BaseDTO, E extends BaseEntity> implements BaseService<D> {
-    private Class<E> entityClass;
+    protected final Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
     public BaseServiceImpl() {
@@ -31,7 +32,14 @@ public abstract class BaseServiceImpl<D extends BaseDTO, E extends BaseEntity> i
 
     @Override
     public List<D> findList(D dto) {
-        return getConverter().toDtoList(getMapper().select(getConverter().toEntity(dto)));
+        E entity = getConverter().toEntity(dto);
+        Example queryExample = buildQueryExample(entity);
+        List<E> entityList = Objects.isNull(queryExample) ? getMapper().select(entity) : getMapper().selectByExample(queryExample);
+        return getConverter().toDtoList(entityList);
+    }
+
+    protected Example buildQueryExample(E entity) {
+        return null;
     }
 
     @Override
