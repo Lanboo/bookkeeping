@@ -42,7 +42,7 @@ public class BookController {
 
     @PostMapping("/save")
     @ResponseBody
-    public void save(BookSaveVO book) {
+    public void save(@Valid @RequestBody BookSaveVO book) {
         BookDTO dto = new BookDTO();
         dto.setId(defaultUidGenerator.getUID());
         dto.setUserCode(userSupport.getUser().getUserCode());
