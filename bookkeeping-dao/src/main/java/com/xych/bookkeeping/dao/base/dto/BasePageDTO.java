@@ -9,6 +9,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class BasePageDTO extends BaseDTO {
     private static final long serialVersionUID = 1L;
-    private Integer pageNum;
+    private Integer current;
     private Integer pageSize;
 }

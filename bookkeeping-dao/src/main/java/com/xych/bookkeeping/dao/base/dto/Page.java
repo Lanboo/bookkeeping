@@ -10,7 +10,7 @@ import lombok.Data;
  * @CreateDate 2020年2月11日下午5:16:57
  */
 @Data
-public class Page<T> implements Serializable {
+public class Page<T extends BaseDTO> implements Serializable {
     private static final long serialVersionUID = 1L;
     //当前页
     private int pageNum;
@@ -19,7 +19,7 @@ public class Page<T> implements Serializable {
     //总记录数
     private long total;
     //结果集
-    private List<T> list;
+    private List<T> data;
 
     //当前页的数量
     private int size;
@@ -52,7 +52,7 @@ public class Page<T> implements Serializable {
         this.pageNum = pageNum > 1 ? pageNum : 1;
         this.pageSize = pageSize;
         this.total = total;
-        this.list = list;
+        this.data = list;
 
         if(list != null) {
             this.size = list.size();
