@@ -1,13 +1,17 @@
 package com.xych.bookkeeping.app.drools.strategy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.EnumUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.xych.bookkeeping.app.common.enums.BusiTypeEnum;
@@ -24,6 +28,18 @@ import lombok.extern.slf4j.Slf4j;
 public class RuleBuilder {
     Map<BusiTypeEnum, RuleStrategy> strategyMap = new ConcurrentHashMap<>();
 
+    @Autowired
+    private List<RuleStrategy> strategyList = new ArrayList<>();
+
+    @PostConstruct
+    private void init() {
+        log.info("规则策略:size={}", strategyList.size());
+        for(RuleStrategy strategy : strategyList) {
+            this.strategyMap.put(strategy.getBusiType(), strategy);
+        }
+        strategyList = null;
+    }
+
     public RuleInfo buildRule(List<RecordRuleDTO> ruleList, Map<Long, List<RecordRuleDetailDTO>> ruleDetailDtosMap) {
         if(CollectionUtils.isEmpty(ruleList) || MapUtils.isEmpty(ruleDetailDtosMap)) {
             throw new BusiException(ExceptionEnum.PARAM_ERROR);
@@ -36,9 +52,5 @@ public class RuleBuilder {
         }
         RuleStrategy ruleStrategy = strategyMap.get(busiType);
         return ruleStrategy.buildRule(ruleList, ruleDetailDtosMap);
-    }
-
-    public void register(BusiTypeEnum busiType, RuleStrategy ruleStrategy) {
-        strategyMap.put(busiType, ruleStrategy);
     }
 }

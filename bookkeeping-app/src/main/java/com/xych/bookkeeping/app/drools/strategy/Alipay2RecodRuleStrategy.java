@@ -20,7 +20,7 @@ public class Alipay2RecodRuleStrategy extends AbstractRuleStrategy {
     }
 
     @Override
-    protected BusiTypeEnum busiType() {
+    protected BusiTypeEnum getBusiType() {
         return BusiTypeEnum.ALIPAY2RECORD;
     }
 

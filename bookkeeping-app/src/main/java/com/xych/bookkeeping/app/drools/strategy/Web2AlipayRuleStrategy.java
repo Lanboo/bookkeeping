@@ -18,7 +18,7 @@ public class Web2AlipayRuleStrategy extends AbstractRuleStrategy {
     }
 
     @Override
-    protected BusiTypeEnum busiType() {
+    protected BusiTypeEnum getBusiType() {
         return BusiTypeEnum.WEB2ALIPAY;
     }
 }
