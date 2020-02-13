@@ -10,12 +10,29 @@ import com.xych.bookkeeping.dao.mapper.BookMapper;
 import com.xych.bookkeeping.dao.mapstruct.BookConverter;
 import com.xych.bookkeeping.dao.service.BookServcie;
 
+import tk.mybatis.mapper.entity.Example;
+
 @Service("bookServcie")
 public class BookServiceImpl extends BasePageServiceImpl<BookDTO, Book> implements BookServcie {
     @Autowired
     private BookMapper mapper;
     @Autowired
     private BookConverter converter;
+
+    /**
+     * 重写分页查询条件
+     * 
+     * bookName 模糊查询
+     */
+    @Override
+    protected Example buildQueryPageExample(Book entity) {
+        Example example = new Example(entityClass);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("id", entity.getId());
+        criteria.andEqualTo("userCode", entity.getUserCode());
+        criteria.andLike("bookName", entity.getBookName());
+        return super.buildQueryPageExample(entity);
+    }
 
     @Override
     protected BookMapper getMapper() {
