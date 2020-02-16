@@ -1,6 +1,7 @@
 package com.xych.bookkeeping.app.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -50,5 +51,11 @@ public class BookController {
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
         this.bookService.addOne(dto);
+    }
+
+    @PostMapping("/remove")
+    @ResponseBody
+    public void remove(@Valid @RequestBody List<Long> ids) {
+        this.bookService.deleteByIds(ids);
     }
 }
