@@ -16,6 +16,7 @@ import com.xych.bookkeeping.app.common.support.UserSupport;
 import com.xych.bookkeeping.app.mapstruct.BookVOConverter;
 import com.xych.bookkeeping.app.vo.base.PageVO;
 import com.xych.bookkeeping.app.vo.book.BookSaveVO;
+import com.xych.bookkeeping.app.vo.book.BookUpdateVO;
 import com.xych.bookkeeping.app.vo.book.BookVO;
 import com.xych.bookkeeping.dao.base.dto.Page;
 import com.xych.bookkeeping.dao.dto.BookDTO;
@@ -57,5 +58,13 @@ public class BookController {
     @ResponseBody
     public void remove(@Valid @RequestBody List<Long> ids) {
         this.bookService.deleteByIds(ids);
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public void update(@Valid @RequestBody BookUpdateVO book) {
+        BookDTO dto = voConverter.toDto(book);
+        dto.setUptTime(new Date());
+        this.bookService.update(dto);
     }
 }
