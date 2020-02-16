@@ -1,5 +1,6 @@
 package com.xych.bookkeeping.dao.service.imp;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,9 @@ public class BookServiceImpl extends BasePageServiceImpl<BookDTO, Book> implemen
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", entity.getId());
         criteria.andEqualTo("userCode", entity.getUserCode());
-        criteria.andLike("bookName", "%" + entity.getBookName() + "%");
+        if(StringUtils.isNotEmpty(entity.getBookName())) {
+            criteria.andLike("bookName", "%" + entity.getBookName() + "%");
+        }
         return example;
     }
 
