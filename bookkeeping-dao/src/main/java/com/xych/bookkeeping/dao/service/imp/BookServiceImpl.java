@@ -31,7 +31,7 @@ public class BookServiceImpl extends BasePageServiceImpl<BookDTO, Book> implemen
         criteria.andEqualTo("id", entity.getId());
         criteria.andEqualTo("userCode", entity.getUserCode());
         criteria.andLike("bookName", "%" + entity.getBookName() + "%");
-        return super.buildQueryPageExample(entity);
+        return example;
     }
 
     @Override
