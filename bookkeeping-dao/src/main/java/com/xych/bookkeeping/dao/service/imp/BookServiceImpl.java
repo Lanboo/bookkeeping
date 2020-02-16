@@ -30,7 +30,7 @@ public class BookServiceImpl extends BasePageServiceImpl<BookDTO, Book> implemen
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", entity.getId());
         criteria.andEqualTo("userCode", entity.getUserCode());
-        criteria.andLike("bookName", entity.getBookName());
+        criteria.andLike("bookName", "%" + entity.getBookName() + "%");
         return super.buildQueryPageExample(entity);
     }
 
@@ -43,5 +43,4 @@ public class BookServiceImpl extends BasePageServiceImpl<BookDTO, Book> implemen
     protected BookConverter getConverter() {
         return converter;
     }
-
 }
