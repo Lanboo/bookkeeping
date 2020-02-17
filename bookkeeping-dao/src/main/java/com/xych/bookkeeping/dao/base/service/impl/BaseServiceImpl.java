@@ -68,4 +68,11 @@ public abstract class BaseServiceImpl<D extends BaseDTO, E extends BaseEntity> i
         return getMapper().deleteByExample(example);
     }
 
+    @Override
+    public Integer deleteByIds(List<Long> ids) {
+        Example example = new Example(entityClass);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", ids);
+        return getMapper().deleteByExample(example);
+    }
 }

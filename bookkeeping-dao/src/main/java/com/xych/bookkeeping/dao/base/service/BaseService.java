@@ -16,4 +16,6 @@ public interface BaseService<T extends BaseDTO> {
     Integer update(T dto);
 
     Integer delete(T dto);
+    
+    Integer deleteByIds(List<Long> ids);
 }
