@@ -1,4 +1,4 @@
-package com.xych.bookkeeping.dao.service.imp;
+package com.xych.bookkeeping.dao.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
