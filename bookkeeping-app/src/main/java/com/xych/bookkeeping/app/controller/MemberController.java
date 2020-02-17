@@ -48,7 +48,7 @@ public class MemberController {
         MemberDTO dto = new MemberDTO();
         dto.setId(defaultUidGenerator.getUID());
         dto.setUserCode(userSupport.getUser().getUserCode());
-        dto.setMemberName(vo.getBookName());
+        dto.setMemberName(vo.getMemberName());
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
         this.memberService.addOne(dto);

@@ -1,4 +1,36 @@
 package com.xych.bookkeeping.app.vo.member;
 
-public class MemberVO {
+import java.util.Date;
+
+import com.xych.bookkeeping.app.vo.base.BasePageVO;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+@Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class MemberVO extends BasePageVO {
+    private static final long serialVersionUID = 1L;
+    /**
+     * ID
+     */
+    private String id;
+    /**
+     * 用户代码
+     */
+    private String userCode;
+    /**
+     * 账本名称
+     */
+    private String memberName;
+    /**
+     * 创建时间
+     */
+    private Date crtTime;
+    /**
+     * 修改时间
+     */
+    private Date uptTime;
 }
