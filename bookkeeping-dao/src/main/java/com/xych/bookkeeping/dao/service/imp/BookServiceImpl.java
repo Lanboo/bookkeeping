@@ -1,7 +1,5 @@
 package com.xych.bookkeeping.dao.service.imp;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,14 +35,6 @@ public class BookServiceImpl extends BasePageServiceImpl<BookDTO, Book> implemen
             criteria.andLike("bookName", "%" + entity.getBookName() + "%");
         }
         return example;
-    }
-
-    @Override
-    public Integer deleteByIds(List<Long> ids) {
-        Example example = new Example(entityClass);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andIn("id", ids);
-        return getMapper().deleteByExample(example);
     }
 
     @Override
