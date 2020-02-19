@@ -1,9 +1,12 @@
 package com.xych.bookkeeping.app.vo.member;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class MemberUpdateVO {
+public class MemberUpdateVO implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * ID
      */
