@@ -1,4 +1,4 @@
-package com.xych.bookkeeping.app.vo.account;
+package com.xych.bookkeeping.app.vo.asset;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AccountVO extends BasePageVO {
+public class AssetVO extends BasePageVO {
     private static final long serialVersionUID = 1L;
     /**
      * ID
@@ -22,17 +22,17 @@ public class AccountVO extends BasePageVO {
      */
     private String userCode;
     /**
-     * 账户名称
+     * 资产名称
      */
-    private String accountName;
+    private String assetName;
     /**
-     * 账户模式（0:资产账户,1:负债账户）
+     * 资产模式（0:资产账户,1:负债账户）
      */
-    private String accountPattern;
+    private String assetPattern;
     /**
-     * 账户类型（比如:储蓄卡,支付宝,借出款,基金;信用卡,蚂蚁花呗,欠款,房贷）
+     * 资产类型（比如:储蓄卡,支付宝,借出款,基金;信用卡,蚂蚁花呗,欠款,房贷）
      */
-    private String accountType;
+    private String assetType;
     /**
      * 余额(元)
      */
