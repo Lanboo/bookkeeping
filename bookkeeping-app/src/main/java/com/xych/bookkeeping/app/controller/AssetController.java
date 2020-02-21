@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xych.bookkeeping.app.common.support.UserSupport;
 import com.xych.bookkeeping.app.mapstruct.AssetVOConverter;
 import com.xych.bookkeeping.app.vo.asset.AssetSaveVO;
 import com.xych.bookkeeping.app.vo.asset.AssetUpdateVO;
@@ -20,6 +21,7 @@ import com.xych.bookkeeping.app.vo.base.PageVO;
 import com.xych.bookkeeping.dao.base.dto.Page;
 import com.xych.bookkeeping.dao.dto.AssetDTO;
 import com.xych.bookkeeping.dao.service.AssetServcie;
+import com.xych.uid.UidGenerator;
 
 /**
  * 资产账户
@@ -32,10 +34,15 @@ public class AssetController {
     private AssetServcie service;
     @Autowired
     private AssetVOConverter voConverter;
+    @Autowired
+    private UidGenerator defaultUidGenerator;
+    @Autowired
+    private UserSupport userSupport;
 
     @PostMapping("/query")
     @ResponseBody
     public PageVO<AssetVO> query(@Valid @RequestBody AssetVO vo) {
+        vo.setUserCode(userSupport.getUser().getUserCode());
         Page<AssetDTO> dtoPage = this.service.findPage(voConverter.toDto(vo));
         return new PageVO<>(dtoPage.getPageNum(), dtoPage.getPageSize(), dtoPage.getTotal(), voConverter.toVoList(dtoPage.getData()));
     }
@@ -44,6 +51,8 @@ public class AssetController {
     @ResponseBody
     public void save(@Valid @RequestBody AssetSaveVO vo) {
         AssetDTO dto = voConverter.toDto(vo);
+        dto.setId(defaultUidGenerator.getUID());
+        dto.setUserCode(userSupport.getUser().getUserCode());
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
         this.service.addOne(dto);
