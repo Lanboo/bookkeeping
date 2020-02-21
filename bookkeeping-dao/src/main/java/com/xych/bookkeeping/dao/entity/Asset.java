@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "t_account")
+@Table(name = "t_asset")
 public class Asset extends BaseEntity {
     private static final long serialVersionUID = 1L;
     /**
