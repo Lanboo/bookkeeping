@@ -3,6 +3,8 @@ package com.xych.bookkeeping.app.vo.category;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.xych.bookkeeping.app.vo.base.BasePageVO;
 
 import lombok.Data;
@@ -41,5 +43,6 @@ public class CategoryVO extends BasePageVO {
     /**
      * 子节点数据
      */
+    @JsonInclude(Include.NON_NULL)
     private List<CategoryVO> children;
 }
