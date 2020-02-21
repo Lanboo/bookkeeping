@@ -8,10 +8,6 @@ import lombok.Data;
 public class AssetSaveVO implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * ID
-     */
-    private String id;
-    /**
      * 资产名称
      */
     private String assetName;
