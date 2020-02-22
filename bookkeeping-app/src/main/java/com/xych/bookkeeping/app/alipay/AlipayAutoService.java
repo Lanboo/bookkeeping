@@ -147,7 +147,7 @@ public class AlipayAutoService {
         grabDetailPage(dto, trEle);
         String amountStr = grabAmount(trEle);
         if(amountStr.startsWith("-") || amountStr.startsWith("+")) {
-            dto.setAmount(new BigDecimal(amountStr.substring(1).trim()));
+            dto.setAmount(new BigDecimal(amountStr.substring(1).trim()).multiply(BigDecimal.valueOf(100)));
             dto.setFundFlow(amountStr.charAt(0) == '-' ? -1 : 1);
         }
         else {
