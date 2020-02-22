@@ -1,6 +1,7 @@
 package com.xych.bookkeeping.app.vo.alipay.record;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class AlipayRecordUpdateVO implements Serializable {
     /**
      * 消费时间
      */
-    private String consumeTime;
+    private Date consumeTime;
     /**
      * 消费标题
      */

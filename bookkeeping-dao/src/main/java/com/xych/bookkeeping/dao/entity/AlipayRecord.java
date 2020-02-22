@@ -22,7 +22,7 @@ public class AlipayRecord extends BaseEntity {
     /**
      * 消费时间
      */
-    private String consumeTime;
+    private Date consumeTime;
     /**
      * 消费标题
      */

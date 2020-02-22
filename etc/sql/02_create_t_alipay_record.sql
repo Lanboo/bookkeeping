@@ -2,7 +2,7 @@ CREATE TABLE t_alipay_record
 (
     id BIGINT NOT NULL COMMENT 'id',
     user_code VARCHAR(32) COMMENT '用户代码',
-    consume_time CHAR(14) COMMENT '交易时间',
+    consume_time DATETIME COMMENT '交易时间',
     consume_title VARCHAR(128) COMMENT '标题',
     trade_no VARCHAR(64) COMMENT '商户订单号',
     trade_id VARCHAR(64) COMMENT '流水号',

@@ -1,12 +1,14 @@
 package com.xych.bookkeeping.app.alipay;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -284,12 +286,14 @@ public class AlipayAutoService {
 
     /**
      * 抓取交易时间
+     * @throws ParseException
      * @CreateDate 2020年1月9日下午5:37:43
      */
-    private String grabConsumeTime(WebElement trEle) {
+    private Date grabConsumeTime(WebElement trEle) throws ParseException {
         String titleHref = trEle.findElement(By.cssSelector(".name > .consume-title > a")).getAttribute("href").trim();
         String timeStr = titleHref.substring(titleHref.lastIndexOf("=") + 1).trim();
-        return timeStr;
+        Date date = DateUtils.parseDate(timeStr, "yyyyMMddHHmmss");
+        return date;
     }
 
     /**
