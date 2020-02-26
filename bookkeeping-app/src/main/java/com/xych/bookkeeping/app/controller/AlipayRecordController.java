@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xych.bookkeeping.app.common.support.UserSupport;
 import com.xych.bookkeeping.app.mapstruct.AlipayRecordVOConverter;
-import com.xych.bookkeeping.app.vo.alipay.record.AlipayRecordSaveVO;
-import com.xych.bookkeeping.app.vo.alipay.record.AlipayRecordUpdateVO;
-import com.xych.bookkeeping.app.vo.alipay.record.AlipayRecordVO;
+import com.xych.bookkeeping.app.vo.AlipayRecordVO;
 import com.xych.bookkeeping.app.vo.base.PageVO;
 import com.xych.bookkeeping.dao.base.dto.Page;
 import com.xych.bookkeeping.dao.dto.AlipayRecordDTO;
@@ -45,7 +43,7 @@ public class AlipayRecordController {
 
     @PostMapping("/save")
     @ResponseBody
-    public void save(@Valid @RequestBody AlipayRecordSaveVO vo) {
+    public void save(@Valid @RequestBody AlipayRecordVO vo) {
         AlipayRecordDTO dto = voConverter.toDto(vo);
         dto.setId(defaultUidGenerator.getUID());
         dto.setUserCode(userSupport.getUser().getUserCode());
@@ -62,7 +60,7 @@ public class AlipayRecordController {
 
     @PostMapping("/update")
     @ResponseBody
-    public void update(@Valid @RequestBody AlipayRecordUpdateVO vo) {
+    public void update(@Valid @RequestBody AlipayRecordVO vo) {
         AlipayRecordDTO dto = voConverter.toDto(vo);
         dto.setUptTime(new Date());
         this.service.update(dto);

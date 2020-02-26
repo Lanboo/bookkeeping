@@ -1,4 +1,4 @@
-package com.xych.bookkeeping.app.vo.alipay.record;
+package com.xych.bookkeeping.app.vo;
 
 import java.util.Date;
 
