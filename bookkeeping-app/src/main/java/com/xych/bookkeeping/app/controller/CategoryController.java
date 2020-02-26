@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xych.bookkeeping.app.common.support.UserSupport;
 import com.xych.bookkeeping.app.mapstruct.CategoryVOConverter;
+import com.xych.bookkeeping.app.vo.CategoryVO;
 import com.xych.bookkeeping.app.vo.base.PageVO;
-import com.xych.bookkeeping.app.vo.category.CategorySaveVO;
-import com.xych.bookkeeping.app.vo.category.CategoryUpdateVO;
-import com.xych.bookkeeping.app.vo.category.CategoryVO;
 import com.xych.bookkeeping.dao.dto.CategoryDTO;
 import com.xych.bookkeeping.dao.service.CategoryServcie;
 import com.xych.uid.UidGenerator;
@@ -60,7 +58,7 @@ public class CategoryController {
 
     @PostMapping("/save")
     @ResponseBody
-    public void save(@Valid @RequestBody CategorySaveVO vo) {
+    public void save(@Valid @RequestBody CategoryVO vo) {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(defaultUidGenerator.getUID());
         dto.setUserCode(userSupport.getUser().getUserCode());
@@ -79,7 +77,7 @@ public class CategoryController {
 
     @PostMapping("/update")
     @ResponseBody
-    public void update(@Valid @RequestBody CategoryUpdateVO vo) {
+    public void update(@Valid @RequestBody CategoryVO vo) {
         CategoryDTO dto = voConverter.toDto(vo);
         dto.setUptTime(new Date());
         this.categoryService.update(dto);

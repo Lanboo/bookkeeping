@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xych.bookkeeping.app.common.support.UserSupport;
 import com.xych.bookkeeping.app.mapstruct.AssetVOConverter;
-import com.xych.bookkeeping.app.vo.asset.AssetSaveVO;
-import com.xych.bookkeeping.app.vo.asset.AssetUpdateVO;
-import com.xych.bookkeeping.app.vo.asset.AssetVO;
+import com.xych.bookkeeping.app.vo.AssetVO;
 import com.xych.bookkeeping.app.vo.base.PageVO;
 import com.xych.bookkeeping.dao.base.dto.Page;
 import com.xych.bookkeeping.dao.dto.AssetDTO;
@@ -49,7 +47,7 @@ public class AssetController {
 
     @PostMapping("/save")
     @ResponseBody
-    public void save(@Valid @RequestBody AssetSaveVO vo) {
+    public void save(@Valid @RequestBody AssetVO vo) {
         AssetDTO dto = voConverter.toDto(vo);
         dto.setId(defaultUidGenerator.getUID());
         dto.setUserCode(userSupport.getUser().getUserCode());
@@ -66,7 +64,7 @@ public class AssetController {
 
     @PostMapping("/update")
     @ResponseBody
-    public void update(@Valid @RequestBody AssetUpdateVO vo) {
+    public void update(@Valid @RequestBody AssetVO vo) {
         AssetDTO dto = voConverter.toDto(vo);
         dto.setUptTime(new Date());
         this.service.update(dto);

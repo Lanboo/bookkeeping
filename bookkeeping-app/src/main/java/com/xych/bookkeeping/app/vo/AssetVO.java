@@ -1,16 +1,26 @@
-package com.xych.bookkeeping.app.vo.asset;
+package com.xych.bookkeeping.app.vo;
 
-import java.io.Serializable;
+import java.util.Date;
+
+import com.xych.bookkeeping.app.vo.base.BasePageVO;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class AssetUpdateVO implements Serializable {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class AssetVO extends BasePageVO {
     private static final long serialVersionUID = 1L;
     /**
      * ID
      */
     private String id;
+    /**
+     * 用户代码
+     */
+    private String userCode;
     /**
      * 资产名称
      */
@@ -27,5 +37,12 @@ public class AssetUpdateVO implements Serializable {
      * 余额(元)
      */
     private String balance;
-
+    /**
+     * 创建时间
+     */
+    private Date crtTime;
+    /**
+     * 修改时间
+     */
+    private Date uptTime;
 }

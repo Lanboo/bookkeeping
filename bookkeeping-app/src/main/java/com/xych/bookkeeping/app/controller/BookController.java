@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xych.bookkeeping.app.common.support.UserSupport;
 import com.xych.bookkeeping.app.mapstruct.BookVOConverter;
+import com.xych.bookkeeping.app.vo.BookVO;
 import com.xych.bookkeeping.app.vo.base.PageVO;
-import com.xych.bookkeeping.app.vo.book.BookSaveVO;
-import com.xych.bookkeeping.app.vo.book.BookUpdateVO;
-import com.xych.bookkeeping.app.vo.book.BookVO;
 import com.xych.bookkeeping.dao.base.dto.Page;
 import com.xych.bookkeeping.dao.dto.BookDTO;
 import com.xych.bookkeeping.dao.service.BookServcie;
@@ -37,18 +35,19 @@ public class BookController {
 
     @PostMapping("/query")
     @ResponseBody
-    public PageVO<BookVO> query(@Valid @RequestBody BookVO book) {
-        Page<BookDTO> dtoPage = this.bookService.findPage(voConverter.toDto(book));
+    public PageVO<BookVO> query(@Valid @RequestBody BookVO vo) {
+        vo.setUserCode(userSupport.getUser().getUserCode());
+        Page<BookDTO> dtoPage = this.bookService.findPage(voConverter.toDto(vo));
         return new PageVO<>(dtoPage.getPageNum(), dtoPage.getPageSize(), dtoPage.getTotal(), voConverter.toVoList(dtoPage.getData()));
     }
 
     @PostMapping("/save")
     @ResponseBody
-    public void save(@Valid @RequestBody BookSaveVO book) {
+    public void save(@Valid @RequestBody BookVO vo) {
         BookDTO dto = new BookDTO();
         dto.setId(defaultUidGenerator.getUID());
         dto.setUserCode(userSupport.getUser().getUserCode());
-        dto.setBookName(book.getBookName());
+        dto.setBookName(vo.getBookName());
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
         this.bookService.addOne(dto);
@@ -62,8 +61,8 @@ public class BookController {
 
     @PostMapping("/update")
     @ResponseBody
-    public void update(@Valid @RequestBody BookUpdateVO book) {
-        BookDTO dto = voConverter.toDto(book);
+    public void update(@Valid @RequestBody BookVO vo) {
+        BookDTO dto = voConverter.toDto(vo);
         dto.setUptTime(new Date());
         this.bookService.update(dto);
     }
