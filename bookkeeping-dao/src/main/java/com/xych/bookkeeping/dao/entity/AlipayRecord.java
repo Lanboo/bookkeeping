@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.xych.bookkeeping.dao.base.entity.BaseEntity;
 
@@ -75,4 +76,15 @@ public class AlipayRecord extends BaseEntity {
      * 操作人
      */
     private String operator;
+    // 非数据库字段
+    /**
+     * 消费开始时间
+     */
+    @Transient
+    private Date consumeTimeStart;
+    /**
+     * 消费结束时间
+     */
+    @Transient
+    private Date consumeTimeEnd;
 }

@@ -74,4 +74,13 @@ public class AlipayRecordDTO extends BasePageDTO {
      * 操作人
      */
     private String operator;
+    // 非数据库字段
+    /**
+     * 消费开始时间
+     */
+    private Date consumeTimeStart;
+    /**
+     * 消费结束时间
+     */
+    private Date consumeTimeEnd;
 }

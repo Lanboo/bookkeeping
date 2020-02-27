@@ -73,4 +73,12 @@ public class AlipayRecordVO extends BasePageVO {
      * 修改时间
      */
     private Date uptTime;
+    /**
+     * 消费开始时间
+     */
+    private Date consumeTimeStart;
+    /**
+     * 消费结束时间
+     */
+    private Date consumeTimeEnd;
 }
