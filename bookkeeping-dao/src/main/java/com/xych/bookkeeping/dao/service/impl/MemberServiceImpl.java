@@ -1,6 +1,5 @@
 package com.xych.bookkeeping.dao.service.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +9,7 @@ import com.xych.bookkeeping.dao.entity.Member;
 import com.xych.bookkeeping.dao.mapper.MemberMapper;
 import com.xych.bookkeeping.dao.mapstruct.MemberConverter;
 import com.xych.bookkeeping.dao.service.MemberServcie;
+import com.xych.bookkeeping.dao.utils.ExampleUtil;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -31,9 +31,7 @@ public class MemberServiceImpl extends BasePageServiceImpl<MemberDTO, Member> im
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", entity.getId());
         criteria.andEqualTo("userCode", entity.getUserCode());
-        if(StringUtils.isNotEmpty(entity.getMemberName())) {
-            criteria.andLike("memberName", "%" + entity.getMemberName() + "%");
-        }
+        ExampleUtil.Criteria.addLike(criteria, "memberName", entity.getMemberName());
         return example;
     }
 

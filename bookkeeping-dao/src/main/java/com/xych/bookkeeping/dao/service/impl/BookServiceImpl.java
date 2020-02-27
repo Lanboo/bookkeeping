@@ -1,6 +1,5 @@
 package com.xych.bookkeeping.dao.service.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +9,7 @@ import com.xych.bookkeeping.dao.entity.Book;
 import com.xych.bookkeeping.dao.mapper.BookMapper;
 import com.xych.bookkeeping.dao.mapstruct.BookConverter;
 import com.xych.bookkeeping.dao.service.BookServcie;
+import com.xych.bookkeeping.dao.utils.ExampleUtil;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -31,9 +31,7 @@ public class BookServiceImpl extends BasePageServiceImpl<BookDTO, Book> implemen
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", entity.getId());
         criteria.andEqualTo("userCode", entity.getUserCode());
-        if(StringUtils.isNotEmpty(entity.getBookName())) {
-            criteria.andLike("bookName", "%" + entity.getBookName() + "%");
-        }
+        ExampleUtil.Criteria.addLike(criteria, "bookName", entity.getBookName());
         return example;
     }
 
