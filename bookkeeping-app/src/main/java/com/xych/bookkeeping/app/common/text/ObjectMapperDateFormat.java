@@ -22,12 +22,11 @@ public class ObjectMapperDateFormat extends SimpleDateFormat {
     static {
         List<String> formarts = new ArrayList<>(12);
         formarts.add("yyyy-MM-dd HH:mm:ss");
-        formarts.add("yyyy-MM-dd HH:mm:ss.SSS");
-        formarts.add("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         formarts.add("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         formarts.add("yyyyMMddHHmmss");
-        formarts.add("yyyyMMdd HHmmss");
+        formarts.add("yyyy-MM-dd HH:mm:ss.SSS");
         formarts.add("yyyyMMddHHmmssSSS");
+        formarts.add("yyyyMMdd HHmmss");
         formarts.add("yyyy-MM");
         formarts.add("yyyy-MM-dd");
         formarts.add("yyyy-MM-dd HH:mm");

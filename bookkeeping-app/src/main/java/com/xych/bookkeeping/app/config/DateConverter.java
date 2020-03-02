@@ -19,7 +19,7 @@ public class DateConverter implements Converter<String, Date> {
         formarts.add("yyyy-MM-dd HH:mm");
         formarts.add("yyyy-MM-dd HH:mm:ss");
         formarts.add("yyyy-MM-dd HH:mm:ss.SSS");
-        formarts.add("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        formarts.add("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         formarts.add("yyyyMM");
         formarts.add("yyyyMMdd");
         formarts.add("yyyyMMddHHmm");
@@ -42,5 +42,12 @@ public class DateConverter implements Converter<String, Date> {
         catch(ParseException e) {
             throw new IllegalArgumentException("Invalid boolean value '" + source + "'", e);
         }
+    }
+
+    public static void main(String[] args) {
+        DateConverter c = new DateConverter();
+        // Z,UTC日期,即世界时间,与北京时间相差八个时区。
+        // 按照yyyy-MM-dd'T'HH:mm:ss.SSS'Z'格式解析后就是本地local时间
+        System.out.println(c.convert("2020-03-02T02:43:19.280Z"));
     }
 }
