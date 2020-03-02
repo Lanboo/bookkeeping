@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -40,6 +41,7 @@ public class ObjectMapperDateFormat extends SimpleDateFormat {
     private DateFormat dateFormat;
 
     public ObjectMapperDateFormat(DateFormat dateFormat) {
+        super();
         //构造函数传入objectmapper默认的dateformat
         this.dateFormat = dateFormat;
     }
@@ -58,11 +60,33 @@ public class ObjectMapperDateFormat extends SimpleDateFormat {
     @Override
     public Date parse(String source, ParsePosition pos) {
         try {
-            return DateUtils.parseDate(source, parsePatterns);
+            Date date = DateUtils.parseDate(source, parsePatterns);
+            if(!Objects.isNull(date)) {
+                // 这里使用lang3的工具类，pos没有发生变化
+                // 所以super.parse(String)会报错
+                pos.setIndex(1);
+            }
+            return date;
         }
         catch(ParseException e) {
             dateFormat.parse(source, pos);
         }
         return null;
+    }
+
+    // 此方法在objectmapper 默认的dateformat里边用到，这里也要重写
+    // 代码：com.fasterxml.jackson.databind.cfg.BaseSettings._force(DateFormat, TimeZone)
+    @Override
+    public Object clone() {
+        DateFormat dateFormat = (DateFormat) this.dateFormat.clone();
+        return new ObjectMapperDateFormat(dateFormat);
+    }
+
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ObjectMapperDateFormat df = new ObjectMapperDateFormat(format);
+        Date date = df.parse("2020-03-02T15:37:02.134Z");
+        System.out.println(date);
+        System.out.println(format.format(date));
     }
 }
