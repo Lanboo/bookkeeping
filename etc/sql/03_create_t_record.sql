@@ -7,7 +7,7 @@ CREATE TABLE t_record
     amount INT COMMENT '金额，分',
     flow TINYINT COMMENT '资金流向:1:收入,-1:支出,0:转账',
     category BIGINT COMMENT '分类',
-    account_type BIGINT COMMENT '账户',
+    asset BIGINT COMMENT '资产',
     record_time CHAR(14) COMMENT '时间',
     record_desc VARCHAR(256) COMMENT '备注',
     family_member VARCHAR(256) COMMENT '成员(允许多成员平摊)',

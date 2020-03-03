@@ -41,7 +41,7 @@ public class RecordDTO extends BasePageDTO {
     /**
      * 账户
      */
-    private Long accountType;
+    private Long asset;
     /**
      * 时间
      */

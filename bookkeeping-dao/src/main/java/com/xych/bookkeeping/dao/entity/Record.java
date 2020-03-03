@@ -42,7 +42,7 @@ public class Record extends BaseEntity {
     /**
      * 账户
      */
-    private Long accountType;
+    private Long asset;
     /**
      * 时间
      */
