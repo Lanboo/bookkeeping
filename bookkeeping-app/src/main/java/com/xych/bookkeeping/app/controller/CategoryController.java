@@ -50,6 +50,7 @@ public class CategoryController {
     @PostMapping("/query/list")
     @ResponseBody
     public List<CategoryVO> queryList(@Valid @RequestBody CategoryVO vo) {
+        vo.setUserCode(userSupport.getUser().getUserCode());
         CategoryDTO temp = voConverter.toDto(vo);
         temp.setUserCode(userSupport.getUser().getUserCode());
         List<CategoryDTO> dtoList = this.categoryService.findList(temp);

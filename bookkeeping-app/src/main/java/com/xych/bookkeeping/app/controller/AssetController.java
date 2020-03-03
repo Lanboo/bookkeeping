@@ -45,6 +45,16 @@ public class AssetController {
         return new PageVO<>(dtoPage.getPageNum(), dtoPage.getPageSize(), dtoPage.getTotal(), voConverter.toVoList(dtoPage.getData()));
     }
 
+    @PostMapping("/query/list")
+    @ResponseBody
+    public List<AssetVO> queryList(@Valid @RequestBody AssetVO vo) {
+        vo.setUserCode(userSupport.getUser().getUserCode());
+        AssetDTO temp = voConverter.toDto(vo);
+        temp.setUserCode(userSupport.getUser().getUserCode());
+        List<AssetDTO> dtoList = this.service.findList(temp);
+        return voConverter.toVoList(dtoList);
+    }
+
     @PostMapping("/save")
     @ResponseBody
     public void save(@Valid @RequestBody AssetVO vo) {

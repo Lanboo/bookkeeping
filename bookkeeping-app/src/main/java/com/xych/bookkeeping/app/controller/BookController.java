@@ -41,6 +41,16 @@ public class BookController {
         return new PageVO<>(dtoPage.getPageNum(), dtoPage.getPageSize(), dtoPage.getTotal(), voConverter.toVoList(dtoPage.getData()));
     }
 
+    @PostMapping("/query/list")
+    @ResponseBody
+    public List<BookVO> queryList(@Valid @RequestBody BookVO vo) {
+        vo.setUserCode(userSupport.getUser().getUserCode());
+        BookDTO temp = voConverter.toDto(vo);
+        temp.setUserCode(userSupport.getUser().getUserCode());
+        List<BookDTO> dtoList = this.bookService.findList(temp);
+        return voConverter.toVoList(dtoList);
+    }
+
     @PostMapping("/save")
     @ResponseBody
     public void save(@Valid @RequestBody BookVO vo) {

@@ -40,6 +40,16 @@ public class MemberController {
         return new PageVO<>(dtoPage.getPageNum(), dtoPage.getPageSize(), dtoPage.getTotal(), voConverter.toVoList(dtoPage.getData()));
     }
 
+    @PostMapping("/query/list")
+    @ResponseBody
+    public List<MemberVO> queryList(@Valid @RequestBody MemberVO vo) {
+        vo.setUserCode(userSupport.getUser().getUserCode());
+        MemberDTO temp = voConverter.toDto(vo);
+        temp.setUserCode(userSupport.getUser().getUserCode());
+        List<MemberDTO> dtoList = this.memberService.findList(temp);
+        return voConverter.toVoList(dtoList);
+    }
+
     @PostMapping("/save")
     @ResponseBody
     public void save(@Valid @RequestBody MemberVO vo) {
