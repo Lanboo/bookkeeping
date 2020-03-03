@@ -8,7 +8,7 @@ CREATE TABLE t_record
     flow TINYINT COMMENT '资金流向:1:收入,-1:支出,0:转账',
     category BIGINT COMMENT '分类',
     asset BIGINT COMMENT '资产',
-    record_time CHAR(14) COMMENT '时间',
+    record_time DATETIME COMMENT '时间',
     record_desc VARCHAR(256) COMMENT '备注',
     family_member VARCHAR(256) COMMENT '成员(允许多成员平摊)',
     alipay_record_id BIGINT COMMENT '支付宝流水表ID',

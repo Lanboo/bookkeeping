@@ -45,7 +45,7 @@ public class RecordDTO extends BasePageDTO {
     /**
      * 时间
      */
-    private String recordTime;
+    private Date recordTime;
     /**
      * 备注
      */
