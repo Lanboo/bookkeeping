@@ -30,6 +30,10 @@ public class AssetDTO extends BasePageDTO {
      */
     private String assetType;
     /**
+     * 初始金额
+     */
+    private Long initialAmount;
+    /**
      * 余额
      */
     private Long balance;

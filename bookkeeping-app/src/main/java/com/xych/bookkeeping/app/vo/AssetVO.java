@@ -34,6 +34,10 @@ public class AssetVO extends BasePageVO {
      */
     private String assetType;
     /**
+     * 初始金额
+     */
+    private String initialAmount;
+    /**
      * 余额(元)
      */
     private String balance;
