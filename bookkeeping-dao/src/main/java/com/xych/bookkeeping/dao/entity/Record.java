@@ -1,6 +1,5 @@
 package com.xych.bookkeeping.dao.entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Table;
@@ -30,9 +29,9 @@ public class Record extends BaseEntity {
     /**
      * 金额，分
      */
-    private BigDecimal amount;
+    private Long amount;
     /**
-     * 资金流向:1:收入,-1:支出,0:转账
+     * 资金流向:1:收入,-1:支出
      */
     private Integer flow;
     /**
