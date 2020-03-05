@@ -40,7 +40,7 @@ public class DicDTO extends BasePageDTO {
     /**
      * 顺序
      */
-    private String idx;
+    private Integer idx;
     /**
      * 创建时间
      */

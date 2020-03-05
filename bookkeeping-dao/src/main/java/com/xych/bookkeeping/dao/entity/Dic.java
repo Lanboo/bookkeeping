@@ -41,7 +41,7 @@ public class Dic extends BaseEntity {
     /**
      * 顺序
      */
-    private String idx;
+    private Integer idx;
     /**
      * 创建时间
      */
