@@ -13,7 +13,7 @@ import com.xych.bookkeeping.dao.utils.ExampleUtil;
 
 import tk.mybatis.mapper.entity.Example;
 
-@Service("recordServcie")
+@Service
 public class RecordServiceImpl extends BasePageServiceImpl<RecordDTO, Record> implements RecordServcie {
     @Autowired
     private RecordMapper mapper;

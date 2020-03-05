@@ -10,7 +10,7 @@ import com.xych.bookkeeping.dao.mapper.AssetMapper;
 import com.xych.bookkeeping.dao.mapstruct.AssetConverter;
 import com.xych.bookkeeping.dao.service.AssetServcie;
 
-@Service("assetServcie")
+@Service
 public class AssetServiceImpl extends BasePageServiceImpl<AssetDTO, Asset> implements AssetServcie {
     @Autowired
     private AssetMapper mapper;

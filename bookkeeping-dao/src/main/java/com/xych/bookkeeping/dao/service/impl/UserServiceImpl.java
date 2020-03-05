@@ -10,7 +10,7 @@ import com.xych.bookkeeping.dao.mapper.UserMapper;
 import com.xych.bookkeeping.dao.mapstruct.UserConverter;
 import com.xych.bookkeeping.dao.service.UserServcie;
 
-@Service("userServcie")
+@Service
 public class UserServiceImpl extends BasePageServiceImpl<UserDTO, User> implements UserServcie {
     @Autowired
     private UserMapper mapper;

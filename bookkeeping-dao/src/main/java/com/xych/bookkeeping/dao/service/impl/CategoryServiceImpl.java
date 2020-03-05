@@ -10,7 +10,7 @@ import com.xych.bookkeeping.dao.mapper.CategoryMapper;
 import com.xych.bookkeeping.dao.mapstruct.CategoryConverter;
 import com.xych.bookkeeping.dao.service.CategoryServcie;
 
-@Service("categoryServcie")
+@Service
 public class CategoryServiceImpl extends BasePageServiceImpl<CategoryDTO, Category> implements CategoryServcie {
     @Autowired
     private CategoryMapper mapper;

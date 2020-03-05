@@ -10,7 +10,7 @@ import com.xych.bookkeeping.dao.mapper.RecordRuleMapper;
 import com.xych.bookkeeping.dao.mapstruct.RecordRuleConverter;
 import com.xych.bookkeeping.dao.service.RecordRuleServcie;
 
-@Service("recordRuleServcie")
+@Service
 public class RecordRuleServiceImpl extends BasePageServiceImpl<RecordRuleDTO, RecordRule> implements RecordRuleServcie {
     @Autowired
     private RecordRuleMapper mapper;

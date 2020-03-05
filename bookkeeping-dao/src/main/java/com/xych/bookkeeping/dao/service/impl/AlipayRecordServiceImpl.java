@@ -13,7 +13,7 @@ import com.xych.bookkeeping.dao.utils.ExampleUtil;
 
 import tk.mybatis.mapper.entity.Example;
 
-@Service("alipayRecordServcie")
+@Service
 public class AlipayRecordServiceImpl extends BasePageServiceImpl<AlipayRecordDTO, AlipayRecord> implements AlipayRecordServcie {
     @Autowired
     private AlipayRecordMapper mapper;
