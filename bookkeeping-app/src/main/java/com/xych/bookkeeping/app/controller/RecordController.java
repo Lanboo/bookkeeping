@@ -49,6 +49,7 @@ public class RecordController {
         dto.setUserCode(userSupport.getUser().getUserCode());
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
+        dto.setOperator(userSupport.getUser().getUserCode());
         this.service.addOne(dto);
     }
 
@@ -63,6 +64,7 @@ public class RecordController {
     public void update(@Valid @RequestBody RecordVO vo) {
         RecordDTO dto = voConverter.toDto(vo);
         dto.setUptTime(new Date());
+        dto.setOperator(userSupport.getUser().getUserCode());
         this.service.update(dto);
     }
 }
