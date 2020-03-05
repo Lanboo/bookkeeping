@@ -73,4 +73,13 @@ public class RecordVO extends BasePageVO {
      * 操作人
      */
     private String operator;
+
+    /**
+     * 消费开始时间
+     */
+    private Date recordTimeStart;
+    /**
+     * 消费结束时间
+     */
+    private Date recordTimeEnd;
 }

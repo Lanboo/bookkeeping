@@ -3,6 +3,7 @@ package com.xych.bookkeeping.dao.entity;
 import java.util.Date;
 
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.xych.bookkeeping.dao.base.entity.BaseEntity;
 
@@ -70,4 +71,15 @@ public class Record extends BaseEntity {
      * 操作人
      */
     private String operator;
+    // 非数据库字段
+    /**
+     * 消费开始时间
+     */
+    @Transient
+    private Date recordTimeStart;
+    /**
+     * 消费结束时间
+     */
+    @Transient
+    private Date recordTimeEnd;
 }
