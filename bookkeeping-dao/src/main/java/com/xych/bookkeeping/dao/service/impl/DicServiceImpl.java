@@ -30,6 +30,10 @@ public class DicServiceImpl extends BasePageServiceImpl<DicDTO, Dic> implements 
         ExampleUtil.Criteria.addLike(criteria, "dicKey", entity.getDicKey());
         ExampleUtil.Criteria.addLike(criteria, "dicValue", entity.getDicValue());
         criteria.andEqualTo("validity", entity.getValidity());
+        example.orderBy("dicType").asc()//
+            .orderBy("idx").asc()//
+            .orderBy("dicKey").asc()//
+            .orderBy("id").asc();
         return example;
     }
 
