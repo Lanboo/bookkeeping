@@ -37,6 +37,14 @@ public class DicController {
         return new PageVO<>(dtoPage.getPageNum(), dtoPage.getPageSize(), dtoPage.getTotal(), voConverter.toVoList(dtoPage.getData()));
     }
 
+    @PostMapping("/query/list")
+    @ResponseBody
+    public List<DicVO> queryList(@Valid @RequestBody DicVO vo) {
+        DicDTO temp = voConverter.toDto(vo);
+        List<DicDTO> dtoList = this.service.findList(temp);
+        return voConverter.toVoList(dtoList);
+    }
+
     @PostMapping("/save")
     @ResponseBody
     public void save(@Valid @RequestBody DicVO vo) {
