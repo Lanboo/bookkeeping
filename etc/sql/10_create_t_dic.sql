@@ -10,5 +10,7 @@ CREATE TABLE t_dic
     idx INT COMMENT '顺序',
     crt_time DATETIME COMMENT '创建时间',
     upt_time DATETIME COMMENT '更新时间',
-    PRIMARY KEY (ID)
+    PRIMARY KEY (ID),
+    UNIQUE KEY uk_t_dic (dic_key,dic_type)
 ) COMMENT '字典表';
+
