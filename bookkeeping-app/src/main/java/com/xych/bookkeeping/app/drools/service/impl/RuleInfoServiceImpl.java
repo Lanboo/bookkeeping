@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.xych.bookkeeping.app.common.enums.ExceptionEnum;
 import com.xych.bookkeeping.app.common.exception.BusiException;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
-import com.xych.bookkeeping.app.drools.service.RuleService;
+import com.xych.bookkeeping.app.drools.service.RuleInfoService;
 import com.xych.bookkeeping.app.drools.strategy.RuleBuilder;
 import com.xych.bookkeeping.dao.dto.RuleDTO;
 import com.xych.bookkeeping.dao.dto.RuleDetailDTO;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class RuleServiceImpl implements RuleService {
+public class RuleInfoServiceImpl implements RuleInfoService {
     @Autowired
     private RuleServcie ruleServcie;
     @Autowired

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import com.xych.bookkeeping.app.common.enums.ExceptionEnum;
 import com.xych.bookkeeping.app.common.exception.BusiException;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
-import com.xych.bookkeeping.app.drools.service.RuleService;
+import com.xych.bookkeeping.app.drools.service.RuleInfoService;
 import com.xych.bookkeeping.app.drools.utils.RuleUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class RuleLoader {
      */
     private final ConcurrentMap<String, KieContainer> kieContainerMap = new ConcurrentHashMap<>();
     @Autowired
-    private RuleService ruleService;
+    private RuleInfoService ruleInfoService;
 
     public KieContainer getKieContainer(String busiType, String id) {
         String kbaseName = busiType + "_" + id;
@@ -49,7 +49,7 @@ public class RuleLoader {
      * 重新加载所有规则
      */
     public void reload(String busiType, String id) {
-        List<RuleInfo> ruleInfos = this.ruleService.find(busiType, id);
+        List<RuleInfo> ruleInfos = this.ruleInfoService.find(busiType, id);
         String kbaseName = busiType + "_" + id;
         String busiTypeTemp = busiType.toLowerCase();
         //

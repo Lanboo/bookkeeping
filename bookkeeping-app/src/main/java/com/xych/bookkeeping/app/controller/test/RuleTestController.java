@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.xych.bookkeeping.app.drools.KieSessionHelper;
 import com.xych.bookkeeping.app.drools.RuleLoader;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
-import com.xych.bookkeeping.app.drools.service.RuleService;
+import com.xych.bookkeeping.app.drools.service.RuleInfoService;
 import com.xych.bookkeeping.dao.dto.AlipayRecordDTO;
 import com.xych.bookkeeping.dao.dto.RecordDTO;
 import com.xych.bookkeeping.dao.service.AlipayRecordServcie;
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("test/rule")
 public class RuleTestController {
     @Autowired
-    private RuleService ruleService;
+    private RuleInfoService ruleInfoService;
     @Autowired
     private RuleLoader ruleLoader;
     @Autowired
@@ -40,7 +40,7 @@ public class RuleTestController {
     @PostMapping("/find")
     @ResponseBody
     public List<RuleInfo> find(String busiType, String id) {
-        return ruleService.find(busiType, id);
+        return ruleInfoService.find(busiType, id);
     }
 
     @PostMapping("/load")
