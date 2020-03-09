@@ -14,8 +14,8 @@ import com.xych.bookkeeping.app.common.enums.ExceptionEnum;
 import com.xych.bookkeeping.app.common.exception.BusiException;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
 import com.xych.bookkeeping.app.drools.utils.RuleUtil;
-import com.xych.bookkeeping.dao.dto.RecordRuleDTO;
-import com.xych.bookkeeping.dao.dto.RecordRuleDetailDTO;
+import com.xych.bookkeeping.dao.dto.RuleDTO;
+import com.xych.bookkeeping.dao.dto.RuleDetailDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,14 +25,14 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
     protected static final String SEMICOLON = ";";
 
     @Override
-    public RuleInfo buildRule(List<RecordRuleDTO> ruleList, Map<Long, List<RecordRuleDetailDTO>> ruleDetailDtosMap) {
+    public RuleInfo buildRule(List<RuleDTO> ruleList, Map<Long, List<RuleDetailDTO>> ruleDetailDtosMap) {
         RuleInfo ruleInfo = RuleInfo.builder() //
             .busiType(ruleList.get(0).getBusiType())//
             .id(ruleList.get(0).getUserCode())//
             .sceneId(ruleList.get(0).getTargetField())//
             .build();
         StringBuilder builder = buildStrBuilder(ruleInfo);
-        for(RecordRuleDTO rule : ruleList) {
+        for(RuleDTO rule : ruleList) {
             buildRule(builder, rule, ruleDetailDtosMap.get(rule.getId()));
             builder.append(LINE_SEPARATOR);
         }
@@ -44,7 +44,7 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
      * 创建规则
      * @CreateDate 2020年1月19日上午11:04:51
      */
-    protected void buildRule(StringBuilder builder, RecordRuleDTO rule, List<RecordRuleDetailDTO> ruleDetailList) {
+    protected void buildRule(StringBuilder builder, RuleDTO rule, List<RuleDetailDTO> ruleDetailList) {
         builder.append("rule \"")//
             .append(rule.getBusiType().toLowerCase())//
             .append("_").append(rule.getTargetField())//
@@ -58,7 +58,7 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
         builder.append("end").append(LINE_SEPARATOR);
     }
 
-    protected String buildRHS(RecordRuleDTO rule) {
+    protected String buildRHS(RuleDTO rule) {
         return MessageFormat.format("    targetObject.set{0}({1});", StringUtils.capitalize(rule.getTargetField()), buildFieldValueStr(rule));
     }
 
@@ -66,7 +66,7 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
      * 根据目标字段，判断该类型，从而决定是否添加双引号，Long后面添加L
      * @CreateDate 2020年1月20日上午10:55:37
      */
-    private String buildFieldValueStr(RecordRuleDTO rule) {
+    private String buildFieldValueStr(RuleDTO rule) {
         try {
             String valueStr = rule.getTargetFieldValue();
             Class<?> fieldClass = targetClass().getDeclaredField(rule.getTargetField()).getType();
@@ -92,7 +92,7 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
      * 创建规则的LHS(条件)
      * @CreateDate 2020年1月19日上午11:05:19
      */
-    protected String buildLHS(RecordRuleDTO rule, List<RecordRuleDetailDTO> ruleDetailList) {
+    protected String buildLHS(RuleDTO rule, List<RuleDetailDTO> ruleDetailList) {
         if(CollectionUtils.isEmpty(ruleDetailList)) {
             return "";
         }
@@ -100,14 +100,14 @@ public abstract class AbstractRuleStrategy extends RuleStrategy {
         return MessageFormat.format(expression, buildConditions(ruleDetailList));
     }
 
-    private Object[] buildConditions(List<RecordRuleDetailDTO> ruleDetailList) {
-        List<RecordRuleDetailDTO> ruleDetails = ruleDetailList.stream() //
-            .sorted(Comparator.comparingInt(RecordRuleDetailDTO::getIdx)) //
+    private Object[] buildConditions(List<RuleDetailDTO> ruleDetailList) {
+        List<RuleDetailDTO> ruleDetails = ruleDetailList.stream() //
+            .sorted(Comparator.comparingInt(RuleDetailDTO::getIdx)) //
             .collect(Collectors.toList());
         Object[] conditions = new Object[ruleDetails.size()];
         int idx = 0;
         String expression = originClass().getSimpleName() + "({0} {1} \"{2}\")";
-        for(RecordRuleDetailDTO ruleDetail : ruleDetails) {
+        for(RuleDetailDTO ruleDetail : ruleDetails) {
             conditions[idx] = MessageFormat.format(expression, ruleDetail.getOriginField(), ruleDetail.getOriginOperator(), ruleDetail.getOriginFieldValue());
             idx++;
         }

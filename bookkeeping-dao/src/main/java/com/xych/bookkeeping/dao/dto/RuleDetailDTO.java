@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class RecordRuleDetailDTO extends BasePageDTO {
+public class RuleDetailDTO extends BasePageDTO {
     private static final long serialVersionUID = 1L;
     /**
      * 规则Id

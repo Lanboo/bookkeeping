@@ -1,4 +1,4 @@
-CREATE TABLE t_record_rule_detail
+CREATE TABLE t_rule_detail
 (
     id BIGINT NOT NULL COMMENT 'id',
     rule_id BIGINT COMMENT '规则id',

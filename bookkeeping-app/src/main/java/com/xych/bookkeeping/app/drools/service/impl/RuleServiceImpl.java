@@ -15,20 +15,20 @@ import com.xych.bookkeeping.app.common.exception.BusiException;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
 import com.xych.bookkeeping.app.drools.service.RuleService;
 import com.xych.bookkeeping.app.drools.strategy.RuleBuilder;
-import com.xych.bookkeeping.dao.dto.RecordRuleDTO;
-import com.xych.bookkeeping.dao.dto.RecordRuleDetailDTO;
-import com.xych.bookkeeping.dao.service.RecordRuleDetailServcie;
-import com.xych.bookkeeping.dao.service.RecordRuleServcie;
+import com.xych.bookkeeping.dao.dto.RuleDTO;
+import com.xych.bookkeeping.dao.dto.RuleDetailDTO;
+import com.xych.bookkeeping.dao.service.RuleDetailServcie;
+import com.xych.bookkeeping.dao.service.RuleServcie;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service("ruleService")
+@Service
 public class RuleServiceImpl implements RuleService {
     @Autowired
-    private RecordRuleServcie recordRuleServcie;
+    private RuleServcie ruleServcie;
     @Autowired
-    private RecordRuleDetailServcie recordRuleDetailServcie;
+    private RuleDetailServcie ruleDetailServcie;
     @Autowired
     private RuleBuilder ruleBuilder;
 
@@ -38,13 +38,13 @@ public class RuleServiceImpl implements RuleService {
     }
 
     private List<RuleInfo> doFind(String sceneId, String id) {
-        List<RecordRuleDTO> rules = findRules(sceneId, id);
+        List<RuleDTO> rules = findRules(sceneId, id);
         if(CollectionUtils.isEmpty(rules)) {
             log.info("未配置规则:sceneId={},id", sceneId, id);
             throw new BusiException(ExceptionEnum.R00001);
         }
-        Map<String, List<RecordRuleDTO>> sceneRuleMap = process(rules);
-        Map<Long, List<RecordRuleDetailDTO>> ruleDetailDtosMap = rules.stream().collect(Collectors.toMap(RecordRuleDTO::getId, dto -> {
+        Map<String, List<RuleDTO>> sceneRuleMap = process(rules);
+        Map<Long, List<RuleDetailDTO>> ruleDetailDtosMap = rules.stream().collect(Collectors.toMap(RuleDTO::getId, dto -> {
             return findRuleDetails(dto);
         }));
         List<RuleInfo> ruleInfos = new ArrayList<>();
@@ -55,7 +55,7 @@ public class RuleServiceImpl implements RuleService {
         return ruleInfos;
     }
 
-    private RuleInfo buildRuleInfo(List<RecordRuleDTO> ruleList, Map<Long, List<RecordRuleDetailDTO>> ruleDetailDtosMap) {
+    private RuleInfo buildRuleInfo(List<RuleDTO> ruleList, Map<Long, List<RuleDetailDTO>> ruleDetailDtosMap) {
         return ruleBuilder.buildRule(ruleList, ruleDetailDtosMap);
     }
 
@@ -63,20 +63,20 @@ public class RuleServiceImpl implements RuleService {
      * 获取规则明细
      * @CreateDate 2020年1月17日下午2:00:21
      */
-    private List<RecordRuleDetailDTO> findRuleDetails(RecordRuleDTO rule) {
-        RecordRuleDetailDTO dto = new RecordRuleDetailDTO();
+    private List<RuleDetailDTO> findRuleDetails(RuleDTO rule) {
+        RuleDetailDTO dto = new RuleDetailDTO();
         dto.setRuleId(rule.getId());
-        return this.recordRuleDetailServcie.findList(dto);
+        return this.ruleDetailServcie.findList(dto);
     }
 
     /**
      * 处理规则，按照 targetField 分组
      * @CreateDate 2020年1月17日下午3:08:42
      */
-    private Map<String, List<RecordRuleDTO>> process(List<RecordRuleDTO> rules) {
-        Map<String, List<RecordRuleDTO>> sceneRuleMap = new HashMap<>();
-        for(RecordRuleDTO rule : rules) {
-            List<RecordRuleDTO> temp = sceneRuleMap.get(rule.getTargetField());
+    private Map<String, List<RuleDTO>> process(List<RuleDTO> rules) {
+        Map<String, List<RuleDTO>> sceneRuleMap = new HashMap<>();
+        for(RuleDTO rule : rules) {
+            List<RuleDTO> temp = sceneRuleMap.get(rule.getTargetField());
             if(temp == null) {
                 temp = new ArrayList<>();
                 sceneRuleMap.put(rule.getTargetField(), temp);
@@ -90,11 +90,11 @@ public class RuleServiceImpl implements RuleService {
      * 获取规则
      * @CreateDate 2020年1月17日下午2:00:21
      */
-    private List<RecordRuleDTO> findRules(String sceneId, String id) {
-        RecordRuleDTO dto = new RecordRuleDTO();
+    private List<RuleDTO> findRules(String sceneId, String id) {
+        RuleDTO dto = new RuleDTO();
         dto.setBusiType(sceneId);
         dto.setUserCode(id);
-        List<RecordRuleDTO> ruleDtos = this.recordRuleServcie.findList(dto);
+        List<RuleDTO> ruleDtos = this.ruleServcie.findList(dto);
         return ruleDtos;
     }
 }

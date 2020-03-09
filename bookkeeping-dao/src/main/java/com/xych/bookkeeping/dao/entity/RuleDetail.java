@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_record_rule_detail")
-public class RecordRuleDetail extends BaseEntity {
+public class RuleDetail extends BaseEntity {
     private static final long serialVersionUID = 1L;
     /**
      * 规则Id

@@ -1,4 +1,4 @@
-CREATE TABLE t_record_rule
+CREATE TABLE t_rule
 (
     id BIGINT NOT NULL COMMENT 'id',
     user_code VARCHAR(32) COMMENT '用户代码',

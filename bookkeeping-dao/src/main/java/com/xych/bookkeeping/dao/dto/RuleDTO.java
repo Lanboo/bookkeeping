@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class RecordRuleDTO extends BasePageDTO {
+public class RuleDTO extends BasePageDTO {
     private static final long serialVersionUID = 1L;
     /**
      * 用户代码

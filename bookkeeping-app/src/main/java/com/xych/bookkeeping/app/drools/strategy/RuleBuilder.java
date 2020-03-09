@@ -18,8 +18,8 @@ import com.xych.bookkeeping.app.common.enums.BusiTypeEnum;
 import com.xych.bookkeeping.app.common.enums.ExceptionEnum;
 import com.xych.bookkeeping.app.common.exception.BusiException;
 import com.xych.bookkeeping.app.drools.model.RuleInfo;
-import com.xych.bookkeeping.dao.dto.RecordRuleDTO;
-import com.xych.bookkeeping.dao.dto.RecordRuleDetailDTO;
+import com.xych.bookkeeping.dao.dto.RuleDTO;
+import com.xych.bookkeeping.dao.dto.RuleDetailDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +40,7 @@ public class RuleBuilder {
         strategyList = null;
     }
 
-    public RuleInfo buildRule(List<RecordRuleDTO> ruleList, Map<Long, List<RecordRuleDetailDTO>> ruleDetailDtosMap) {
+    public RuleInfo buildRule(List<RuleDTO> ruleList, Map<Long, List<RuleDetailDTO>> ruleDetailDtosMap) {
         if(CollectionUtils.isEmpty(ruleList) || MapUtils.isEmpty(ruleDetailDtosMap)) {
             throw new BusiException(ExceptionEnum.PARAM_ERROR);
         }

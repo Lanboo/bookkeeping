@@ -1,8 +1,8 @@
 package com.xych.bookkeeping.dao.mapper;
 
 import com.xych.bookkeeping.dao.base.mapper.BaseMapper;
-import com.xych.bookkeeping.dao.entity.RecordRuleDetail;
+import com.xych.bookkeeping.dao.entity.RuleDetail;
 
 @org.apache.ibatis.annotations.Mapper
-public interface RecordRuleDetailMapper extends BaseMapper<RecordRuleDetail> {
+public interface RuleDetailMapper extends BaseMapper<RuleDetail> {
 }
