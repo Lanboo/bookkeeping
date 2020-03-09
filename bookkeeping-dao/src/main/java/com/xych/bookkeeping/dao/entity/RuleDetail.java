@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "t_record_rule_detail")
+@Table(name = "t_rule_detail")
 public class RuleDetail extends BaseEntity {
     private static final long serialVersionUID = 1L;
     /**
