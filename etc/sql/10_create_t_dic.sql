@@ -3,7 +3,6 @@ CREATE TABLE t_dic
     id BIGINT NOT NULL COMMENT 'id',
     dic_key VARCHAR(64) COMMENT '字典key',
     dic_value VARCHAR(256) COMMENT '字典值',
-    data_type VARCHAR(64) COMMENT '字典Key数据类型',
     dic_type VARCHAR(32) COMMENT '字典类型',
     dic_desc VARCHAR(64) COMMENT '字典类型描述',
     parent_id BIGINT COMMENT '父级ID',

@@ -22,10 +22,6 @@ public class DicDTO extends BasePageDTO {
      */
     private String dicValue;
     /**
-     * 数据类型
-     */
-    private String dataType;
-    /**
      * 字典类型
      */
     private String dicType;
