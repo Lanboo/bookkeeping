@@ -15,14 +15,6 @@ import lombok.EqualsAndHashCode;
 public class Dic extends BaseEntity {
     private static final long serialVersionUID = 1L;
     /**
-     * 字典类型
-     */
-    private String dicType;
-    /**
-     * 字典类型描述
-     */
-    private String dicDesc;
-    /**
      * 字典key
      */
     private String dicKey;
@@ -30,6 +22,14 @@ public class Dic extends BaseEntity {
      * 字典值
      */
     private String dicValue;
+    /**
+     * 字典类型
+     */
+    private String dicType;
+    /**
+     * 字典类型描述
+     */
+    private String dicDesc;
     /**
      * 父级ID
      */
