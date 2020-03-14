@@ -25,9 +25,9 @@ public class DicServiceImpl extends BasePageServiceImpl<DicDTO, Dic> implements 
         Example example = new Example(entityClass);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", entity.getId());
-        ExampleUtil.Criteria.addLike(criteria, "dicType", entity.getDicType());
+        criteria.andEqualTo("dicType", entity.getDicType());
         ExampleUtil.Criteria.addLike(criteria, "dicDesc", entity.getDicDesc());
-        ExampleUtil.Criteria.addLike(criteria, "dicKey", entity.getDicKey());
+        criteria.andEqualTo("dicKey", entity.getDicKey());
         ExampleUtil.Criteria.addLike(criteria, "dicValue", entity.getDicValue());
         criteria.andEqualTo("validity", entity.getValidity());
         example.orderBy("dicType").asc()//
