@@ -1,6 +1,7 @@
 package com.xych.bookkeeping.app.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import com.xych.bookkeeping.app.vo.base.BasePageVO;
 
@@ -45,4 +46,8 @@ public class RuleVO extends BasePageVO {
      * 修改时间
      */
     private Date uptTime;
+    /**
+     * 规则明细
+     */
+    private List<RuleDetailVO> details;
 }

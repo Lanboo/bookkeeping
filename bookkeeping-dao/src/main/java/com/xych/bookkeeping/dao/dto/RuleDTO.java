@@ -1,6 +1,7 @@
 package com.xych.bookkeeping.dao.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import com.xych.bookkeeping.dao.base.dto.BasePageDTO;
 
@@ -41,4 +42,8 @@ public class RuleDTO extends BasePageDTO {
      * 修改时间
      */
     private Date uptTime;
+    /**
+     * 规则明细
+     */
+    private List<RuleDetailDTO> details;
 }
