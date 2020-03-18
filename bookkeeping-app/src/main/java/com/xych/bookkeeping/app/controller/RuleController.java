@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +53,9 @@ public class RuleController {
         dto.setId(defaultUidGenerator.getUID());
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
+        if(CollectionUtils.isNotEmpty(dto.getDetails())) {
+            dto.getDetails().forEach(detail -> detail.setId(defaultUidGenerator.getUID()));
+        }
         this.service.addOne(dto);
     }
 
@@ -66,6 +70,9 @@ public class RuleController {
     public void update(@Valid @RequestBody RuleVO vo) {
         RuleDTO dto = voConverter.toDto(vo);
         dto.setUptTime(new Date());
+        if(CollectionUtils.isNotEmpty(dto.getDetails())) {
+            dto.getDetails().forEach(detail -> detail.setId(defaultUidGenerator.getUID()));
+        }
         this.service.update(dto);
     }
 }
