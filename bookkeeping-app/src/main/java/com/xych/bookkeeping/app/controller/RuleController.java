@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xych.bookkeeping.app.common.support.UserSupport;
 import com.xych.bookkeeping.app.mapstruct.RuleVOConverter;
 import com.xych.bookkeeping.app.vo.RuleVO;
 import com.xych.bookkeeping.app.vo.base.PageVO;
@@ -30,6 +31,8 @@ public class RuleController {
     private RuleVOConverter voConverter;
     @Autowired
     private UidGenerator defaultUidGenerator;
+    @Autowired
+    private UserSupport userSupport;
 
     @PostMapping("/query")
     @ResponseBody
@@ -51,10 +54,14 @@ public class RuleController {
     public void save(@Valid @RequestBody RuleVO vo) {
         RuleDTO dto = voConverter.toDto(vo);
         dto.setId(defaultUidGenerator.getUID());
+        dto.setUserCode(userSupport.getUser().getUserCode());
         dto.setCrtTime(new Date());
         dto.setUptTime(dto.getCrtTime());
         if(CollectionUtils.isNotEmpty(dto.getDetails())) {
-            dto.getDetails().forEach(detail -> detail.setId(defaultUidGenerator.getUID()));
+            dto.getDetails().forEach(detail -> {
+                detail.setId(defaultUidGenerator.getUID());
+                detail.setRuleId(dto.getId());
+            });
         }
         this.service.addOne(dto);
     }
